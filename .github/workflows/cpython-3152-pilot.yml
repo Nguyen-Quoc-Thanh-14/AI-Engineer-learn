@@ -27,3 +27,38 @@ jobs:
           python-version: '3.15.2'
       - name: Test four original demos with output oracle
         run: python tests/verify_four.py
+
+  free-threaded:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2t'
+      - name: Verify GIL off and lock-protected threads
+        run: python -X gil=0 tests/verify_free_threading.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: free-threaded-evidence
+          path: evidence/free_threading.json
+          if-no-files-found: warn
+  cpu-libraries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Install pinned wheel builds
+        run: python -m pip install --only-binary=:all: numpy==2.5.4 pandas==3.1.0 scikit-learn==1.9.1 torch==2.15.0 pyarrow==26.0.0
+      - name: Run CPU integration checks
+        run: python tests/verify_dependencies.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpu-libraries-evidence
+          path: evidence/cpu_dependencies.json
+          if-no-files-found: warn
