@@ -1,0 +1,29 @@
+name: CPython 3.15.2 source-bound semantic contracts
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - 'tests/semantic_contracts_3152.py'
+      - '.github/workflows/semantic-contracts-3152.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  targeted-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - run: python -m pip install scikit-learn==1.9.1
+      - name: Verify 17 output oracles and 5 source-bound adversarial groups
+        run: python tests/semantic_contracts_3152.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpython-3152-semantic-contracts
+          path: evidence/semantic_contracts_3152.json
+          if-no-files-found: warn
