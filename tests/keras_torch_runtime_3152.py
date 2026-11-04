@@ -81,8 +81,13 @@ def run():
         with h5py.File(h5path, "r") as f:
             assert f["values"][:].tolist() == [1, 2, 3]
 
+    wheel_lines = (EVIDENCE / "h5py_wheel_sha256.txt").read_text(encoding="utf-8").strip().splitlines()
+    assert len(wheel_lines) == 1, wheel_lines
+    wheel_sha256 = wheel_lines[0].split()[0]
+    assert len(wheel_sha256) == 64 and all(c in "0123456789abcdef" for c in wheel_sha256)
     return {
         "status": "KERAS_RUNTIME_PASS",
+        "h5py_wheel_sha256": wheel_sha256,
         "python": sys.version, "platform": platform.platform(), "backend": keras.backend.backend(),
         "versions": {name: md.version(name) for name in ("keras", "torch", "h5py", "numpy")},
         "hdf5_lib_version": h5py.version.hdf5_version,

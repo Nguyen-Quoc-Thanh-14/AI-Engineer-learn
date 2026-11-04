@@ -17,6 +17,8 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--full',type=Path,required=True,help='strict full 536-case run_validation.py report')
     p.add_argument('--deep',type=Path,required=True,help='strict run_deep_validation.py report')
+    p.add_argument('--keras',type=Path,required=True,help='Keras runtime evidence from CPython 3.15.2')
+    p.add_argument('--pip-check',type=Path,required=True,help='Successful pip check output')
     p.add_argument('--output',type=Path,default=HERE/'CERTIFICATION_GATE_RESULT.json')
     a=p.parse_args()
     full=json.loads(a.full.read_text(encoding='utf8'))
@@ -60,6 +62,31 @@ def main():
     full_problem='; '.join(issues[:6]) if issues else None
     core = bool(full_315 and deep_315 and not full_problem and not missing)
     tracks={k:rows.get(k,{}).get('status','NOT_RECORDED') for k in OPTIONAL_TRACKS}
+    keras=json.loads(a.keras.read_text(encoding='utf8'))
+    expected_keras_source=COURSE_ROOT/'tests/keras_torch_runtime_3152.py'
+    versions=keras.get('versions', {})
+    pip_check_text=a.pip_check.read_text(encoding='utf8').strip()
+    keras_checks={
+        'status': keras.get('status')=='KERAS_RUNTIME_PASS',
+        'target_version': keras.get('python','').startswith('3.15.2 '),
+        'backend': keras.get('backend')=='torch',
+        'versions': all(versions.get(k)==v for k,v in {
+            'keras':'3.15.1','torch':'2.15.0','h5py':'3.16.0','numpy':'2.5.4'}.items()),
+        'source_sha256': (expected_keras_source.is_file() and
+            hashlib.sha256(expected_keras_source.read_bytes()).hexdigest()==keras.get('source_sha256')),
+        'wheel_sha256': (len(keras.get('h5py_wheel_sha256',''))==64 and
+            all(c in '0123456789abcdef' for c in keras.get('h5py_wheel_sha256',''))),
+        'pip_check': pip_check_text=='No broken requirements found.',
+        'gradient': keras.get('gradient_observed')==[-4.0,0.0,6.0],
+        'training': (isinstance(keras.get('initial_mse'),(float,int)) and
+            isinstance(keras.get('final_mse'),(float,int)) and
+            keras['initial_mse']>0 and keras['final_mse']<keras['initial_mse']*.05),
+        'inference': (isinstance(keras.get('prediction_x3'),(float,int)) and
+            abs(keras['prediction_x3']-7.0)<.3),
+        'save_load': (isinstance(keras.get('prediction_after_reload'),(float,int)) and
+            abs(keras['prediction_after_reload']-keras.get('prediction_x3',float('inf')))<1e-5),
+    }
+    keras_pass=all(keras_checks.values())
     report={'schema':'technical-audit-gate-v30',
         'target':'CPython 3.15.2',
         'full_suite_target_verified':full_315,
@@ -68,11 +95,14 @@ def main():
         'missing_or_failing_mandatory_deep':missing,
         'core_cpu_technical_gate':'PASS' if core else 'NOT_PASSED',
         'additional_track_status':tracks,
+        'keras_runtime_gate':'PASS' if keras_pass else 'NOT_PASSED',
+        'keras_evidence_checks':keras_checks,
+        'cpu_plus_keras_gate':'PASS' if core and keras_pass else 'NOT_PASSED',
         'global_professional_certification':'NOT_GRANTED_AUTOMATICALLY',
         'reason':'GPU/free-threading/native ABI need actual matching hardware/build; mathematical correctness, adversarial tests and external review cannot be proven by a smoke runner.'}
     a.output.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
     print(json.dumps({'core_cpu_technical_gate':report['core_cpu_technical_gate'],
                      'additional_track_status':tracks,'output':str(a.output)},ensure_ascii=False))
-    return 0 if core else 3
+    return 0 if core and keras_pass else 3
 
 if __name__=='__main__':raise SystemExit(main())
