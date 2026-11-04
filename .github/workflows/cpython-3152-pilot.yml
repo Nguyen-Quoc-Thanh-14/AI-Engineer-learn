@@ -47,6 +47,8 @@ jobs:
         with:
           python-version: '3.15.2'
       - name: Install pinned wheel builds
-        run: python -m pip install --only-binary=:all: numpy==2.5.4 pandas==3.1.0 scikit-learn==1.9.1 torch==2.15.0 pyarrow==26.0.0
+        run: |
+
+          python -m pip install --only-binary=:all: numpy==2.5.4 pandas==3.1.0 scikit-learn==1.9.1 torch==2.15.0 pyarrow==26.0.0
       - name: Run CPU integration checks
         run: python tests/verify_dependencies.py
