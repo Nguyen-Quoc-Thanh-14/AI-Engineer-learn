@@ -2,6 +2,7 @@ name: CPython 3.15.2 four original demos
 on:
   push:
     branches:
+      - main
       - audit/cpython-3.15.2-four-demos
   workflow_dispatch:
 permissions:
