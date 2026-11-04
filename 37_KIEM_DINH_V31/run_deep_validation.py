@@ -194,13 +194,22 @@ def main():
             record['status']='SKIP_NEEDS_CPYTHON_3152';results.append(record);continue
         package=LIBRARIES.get(name)
         if package:
-            try: record['installed_version']=importlib.metadata.version(package)
-            except importlib.metadata.PackageNotFoundError:
+            candidates=('opencv-python-headless','opencv-python') if name=='library_opencv' else (package,)
+            for candidate in candidates:
+                try:
+                    record['installed_version']=importlib.metadata.version(candidate)
+                    record['distribution']=candidate
+                    break
+                except importlib.metadata.PackageNotFoundError:
+                    pass
+            if not record.get('installed_version'):
                 record['status']='SKIP_DEPENDENCY_NOT_INSTALLED';results.append(record);continue
             if name=='library_pandas_cow3' and int(record['installed_version'].split('.')[0])<3:
                 record['status']='SKIP_NEEDS_PANDAS_3';results.append(record);continue
-        if name=='free_threaded_no_gil' and not target:
-            record['status']='SKIP_NEEDS_CPYTHON_3152_FREE_BUILD';results.append(record);continue
+        if name=='free_threaded_no_gil':
+            import sysconfig
+            if not target or sysconfig.get_config_var('Py_GIL_DISABLED') != 1:
+                record['status']='SKIP_NEEDS_CPYTHON_3152_FREE_BUILD';results.append(record);continue
         exec_result=run_code(tests[name], args.timeout, force_gil_off=(name=='free_threaded_no_gil'))
         record.update(exec_result)
         if record['rc']==0:record['status']='PASS_TARGET_3152' if target else 'PASS_BASELINE_ONLY'
