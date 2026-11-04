@@ -1,0 +1,12 @@
+name: GitHub Actions availability probe
+on:
+  push:
+    branches:
+      - audit/cpython-3.15.2-four-demos
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Runner availability
+        run: echo "RUNNER_OK"
