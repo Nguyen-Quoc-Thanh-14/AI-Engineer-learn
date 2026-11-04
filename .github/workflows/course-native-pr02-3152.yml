@@ -1,0 +1,47 @@
+name: PR02 real-course native abi3t extension
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - '03_HOC_PHAN/PR/PR02/LAB_NATIVE_ABI3T/**'
+      - '.github/workflows/course-native-pr02-3152.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compile-regular:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Compile curriculum C extension targeting abi3t
+        shell: bash
+        run: |
+          set -euo pipefail
+          INCLUDE=$(python -c "import sysconfig; print(sysconfig.get_path('include'))")
+          cc -std=c11 -shared -fPIC -O2 -Wall -Wextra -Werror -Wno-unused-parameter -I "$INCLUDE" 03_HOC_PHAN/PR/PR02/LAB_NATIVE_ABI3T/course_math.c -o 03_HOC_PHAN/PR/PR02/LAB_NATIVE_ABI3T/course_math.abi3t.so
+      - run: python 03_HOC_PHAN/PR/PR02/LAB_NATIVE_ABI3T/test_course_math.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr02-course-abi3t-binary
+          path: 03_HOC_PHAN/PR/PR02/LAB_NATIVE_ABI3T/course_math.abi3t.so
+          if-no-files-found: error
+  reuse-free-threaded:
+    needs: compile-regular
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2t'
+      - uses: actions/download-artifact@v4
+        with:
+          name: pr02-course-abi3t-binary
+          path: 03_HOC_PHAN/PR/PR02/LAB_NATIVE_ABI3T
+      - name: Test same binary with GIL disabled
+        run: python -X gil=0 03_HOC_PHAN/PR/PR02/LAB_NATIVE_ABI3T/test_course_math.py
