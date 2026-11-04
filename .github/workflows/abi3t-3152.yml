@@ -1,0 +1,49 @@
+name: CPython 3.15.2 native abi3t smoke test
+on:
+  push:
+    branches:
+      - main
+      - audit/cpython-3.15.2-four-demos
+    paths:
+      - 'native/**'
+      - '.github/workflows/abi3t-3152.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-abi3t:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Compile abi3t shared object
+        shell: bash
+        run: |
+          set -euo pipefail
+          INCLUDE=$(python -c "import sysconfig; print(sysconfig.get_path('include'))")
+          cc -std=c11 -shared -fPIC -O2 -Wall -Wextra -Werror -Wno-unused-parameter -I "$INCLUDE" native/miniabi.c -o native/miniabi.abi3t.so
+      - name: Check import and assertions on regular CPython
+        run: python native/test_miniabi.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: abi3t-shared-object
+          path: native/miniabi.abi3t.so
+          if-no-files-found: error
+  reuse-on-free-threaded:
+    needs: build-abi3t
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2t'
+      - uses: actions/download-artifact@v4
+        with:
+          name: abi3t-shared-object
+          path: native
+      - name: Import same compiled abi3t object with GIL disabled
+        run: python -X gil=0 native/test_miniabi.py

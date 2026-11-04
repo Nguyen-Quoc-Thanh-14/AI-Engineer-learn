@@ -1,0 +1,54 @@
+name: Full Python 3.15.2 course validation (536 scripts)
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - '03_HOC_PHAN/**'
+      - '31_HOAN_THIEN_LOI_GIAI_V28/**'
+      - '35_KIEM_DINH_CPYTHON_3152/**'
+      - '37_KIEM_DINH_V31/**'
+      - '.github/workflows/full-course-3152.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  full-regular:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Verify full course file inventory
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('.')
+          demos=list(root.glob('03_HOC_PHAN/**/MA_MAU/*_demo.py'))
+          solutions=list(root.glob('31_HOAN_THIEN_LOI_GIAI_V28/*_bai_B_solution.py'))
+          lessons=list(root.glob('03_HOC_PHAN/**/BAI_HOC/*.md'))
+          print(f"lessons={len(lessons)}, demos={len(demos)}, solutions={len(solutions)}")
+          assert len(lessons)==441 and len(demos)==441 and len(solutions)==95, "Source tree incomplete: no certification"
+          PY
+      - name: Install exact CPU dependency builds
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.5.4 pandas==3.1.0 scikit-learn==1.9.1 torch==2.15.0 pyarrow==26.0.0
+      - name: Run 536 independent demos and B-solution programs
+        run: python 35_KIEM_DINH_CPYTHON_3152/run_validation.py --strict --suite all --timeout 60 --jobs 2 --output full_regular.json
+      - name: Run semantic checks
+        run: python 37_KIEM_DINH_V31/run_deep_validation.py --mode strict --group all --timeout 50 --output deep_regular.json
+      - name: Apply full-course core CPU gate
+        run: python 37_KIEM_DINH_V31/certification_gate.py --full full_regular.json --deep deep_regular.json --output gate_regular.json
+      - name: Retain evidence whether gate passes or fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: complete-cpython-3152-cpu-evidence
+          path: |
+            full_regular.json
+            deep_regular.json
+            gate_regular.json
+          if-no-files-found: warn
