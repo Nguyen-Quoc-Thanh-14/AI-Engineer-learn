@@ -1,15 +1,29 @@
-name: CPython 3.15.2 pilot - minimal
+name: CPython 3.15.2 four original demos
 on:
   push:
     branches:
       - audit/cpython-3.15.2-four-demos
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  ubuntu:
+  ubuntu-four-demos:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Show Python
-        run: python --version
-      - name: Check test script syntax
-        run: python -m py_compile tests/verify_four.py tests/verify_free_threading.py tests/verify_dependencies.py
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Test four original demos with output oracle
+        run: python tests/verify_four.py
+  windows-four-demos:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Test four original demos with output oracle
+        run: python tests/verify_four.py
