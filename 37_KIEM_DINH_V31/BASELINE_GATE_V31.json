@@ -1,0 +1,31 @@
+{
+  "schema": "technical-audit-gate-v30",
+  "target": "CPython 3.15.2",
+  "full_suite_target_verified": false,
+  "deep_suite_target_verified": false,
+  "full_suite_problem": "Unexpected statuses: {'REQUIRES_PYTHON_315': 4, 'PASS_EXIT_0_AFTER_RETRY': 2}",
+  "missing_or_failing_mandatory_deep": [
+    "feature_frozendict",
+    "feature_sentinel",
+    "feature_unpack_comprehension",
+    "feature_lazy_import",
+    "original_C07.02",
+    "original_C07.03",
+    "original_C07.04",
+    "original_F05.02",
+    "library_numpy",
+    "library_pandas_cow3",
+    "library_sklearn",
+    "library_torch_cpu",
+    "library_pyarrow"
+  ],
+  "core_cpu_technical_gate": "NOT_PASSED",
+  "additional_track_status": {
+    "library_tensorflow": "SKIP_DEPENDENCY_NOT_INSTALLED",
+    "gpu_torch_cuda": "SKIP_HARDWARE_OR_BUILD",
+    "free_threaded_no_gil": "SKIP_NEEDS_CPYTHON_3152_FREE_BUILD",
+    "native_abi_compiled_extension": "SKIP_NEEDS_CPYTHON_3152"
+  },
+  "global_professional_certification": "NOT_GRANTED_AUTOMATICALLY",
+  "reason": "GPU/free-threading/native ABI need actual matching hardware/build; mathematical correctness, adversarial tests and external review cannot be proven by a smoke runner."
+}

@@ -1,0 +1,14 @@
+{
+  "source_archive": "GIAO_TRINH_PYTHON_v2_8_LOI_GIAI_VA_KIEM_DINH.zip",
+  "source_archive_sha256": "ef6233a0d10474d9651622f19e428c5e4e5b76c9aa3f78546922314ab1f75555",
+  "demo_count": 441,
+  "demos_with_assert_py313": 373,
+  "demos_without_assert_or_nonparseable": 68,
+  "syntax_315_only": [
+    "C07.04",
+    "F05.02"
+  ],
+  "target_python_installed": false,
+  "target_python_runtime_verified": false,
+  "run_mode": "No external network access for Python 3.15.2 installer. Offline Python 3.13.5 baseline only."
+}

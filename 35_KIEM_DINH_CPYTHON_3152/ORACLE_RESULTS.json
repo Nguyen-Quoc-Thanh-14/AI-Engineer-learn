@@ -1,0 +1,141 @@
+{
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "results": [
+    {
+      "id": "A01.01",
+      "status": "PASS_ORACLE",
+      "actual": "Thành tiền: 36000\n",
+      "expected": "Thành tiền: 36000\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "A01.02",
+      "status": "PASS_ORACLE",
+      "actual": "Đã xác định thư mục: True\n",
+      "expected": "Đã xác định thư mục: True\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "A02.02",
+      "status": "PASS_ORACLE",
+      "actual": "Xin chào Python\n",
+      "expected": "Xin chào Python\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "A03.01",
+      "status": "PASS_ORACLE",
+      "actual": "12\n",
+      "expected": "12\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "B01.01",
+      "status": "PASS_ORACLE",
+      "actual": "int\nTrue\nstr\n",
+      "expected": "int\nTrue\nstr\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "B02.01",
+      "status": "PASS_ORACLE",
+      "actual": "3.5\n3\n-4\n1\n",
+      "expected": "3.5\n3\n-4\n1\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "B03.01",
+      "status": "PASS_ORACLE",
+      "actual": "6\n8\nCÀ PHÊ\n",
+      "expected": "6\n8\nCÀ PHÊ\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "B04.01",
+      "status": "PASS_ORACLE",
+      "actual": "False\nkhông có tên\nTrue\n",
+      "expected": "False\nkhông có tên\nTrue\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "B05.01",
+      "status": "PASS_ORACLE",
+      "actual": "Khá\n",
+      "expected": "Khá\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "B06.01",
+      "status": "PASS_ORACLE",
+      "actual": "10\n3\n2\n1\n",
+      "expected": "10\n3\n2\n1\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "B07.01",
+      "status": "PASS_ORACLE",
+      "actual": "20\n0\n",
+      "expected": "20\n0\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "C01.01",
+      "status": "PASS_ORACLE",
+      "actual": "[1, 2] (1, 2) [1, 3]\n[1, 2, 3]\n",
+      "expected": "[1, 2] (1, 2) [1, 3]\n[1, 2, 3]\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "C02.01",
+      "status": "PASS_ORACLE",
+      "actual": "2\n0\n[('ao', 2), ('quan', 3)]\n",
+      "expected": "2\n0\n[('ao', 2), ('quan', 3)]\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "C03.01",
+      "status": "PASS_ORACLE",
+      "actual": "[1, 2]\n(1,) (1, 2)\n",
+      "expected": "[1, 2]\n(1,) (1, 2)\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "C04.01",
+      "status": "PASS_ORACLE",
+      "actual": "[4, 3, 2, 1, 0]\n0 [1, 2, 3] 4\n",
+      "expected": "[4, 3, 2, 1, 0]\n0 [1, 2, 3] 4\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "C05.01",
+      "status": "PASS_ORACLE",
+      "actual": "a\nb\n['a', 'b']\n",
+      "expected": "a\nb\n['a', 'b']\n",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "id": "C06.01",
+      "status": "PASS_ORACLE",
+      "actual": "[('cà phê', 2), ('trà', 1)]\n",
+      "expected": "[('cà phê', 2), ('trà', 1)]\n",
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ]
+}
