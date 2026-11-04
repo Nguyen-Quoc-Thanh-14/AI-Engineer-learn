@@ -15,7 +15,8 @@ jobs:
       - name: Check NVIDIA driver
         run: nvidia-smi
       - name: Install pinned PyTorch wheel
-        run: python -m pip install --only-binary=:all: torch==2.15.0
+        run: |
+          python -m pip install --only-binary=:all: torch==2.15.0
       - name: Verify actual CUDA tensor operations
         shell: bash
         run: |
