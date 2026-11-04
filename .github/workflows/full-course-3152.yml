@@ -38,8 +38,13 @@ jobs:
           python -m pip install --only-binary=:all: numpy==2.5.4 pandas==3.1.0 scikit-learn==1.9.1 torch==2.15.0 pyarrow==26.0.0
       - name: Install additional libraries required by 13 previously blocked programs
         run: |
-          python -m pip install --only-binary=:all: keras==3.15.1 packaging pillow opencv-python-headless==5.0.0.93 fastapi sqlalchemy
+          python -m pip install --only-binary=:all: packaging pillow opencv-python-headless==5.0.0.93 fastapi sqlalchemy
+          # PL05.02 checks package metadata only. Keras's h5py dependency has
+          # no cp315 binary wheel here, so this step MUST NOT imply Keras works.
+          python -m pip install --no-deps keras==3.15.1
           python -m pip freeze > resolved_dependencies_3152.txt
+          python -m pip check > pip_dependency_health_3152.txt || true
+          printf 'WARNING: keras==3.15.1 was installed without deps ONLY for PL05.02 metadata demonstration. h5py/runtime Keras are NOT validated.\\n' > KERAS_METADATA_ONLY.txt
       - name: Run 536 independent demos and B-solution programs
         run: python 35_KIEM_DINH_CPYTHON_3152/run_validation.py --strict --suite all --timeout 60 --jobs 2 --output full_regular.json
       - name: Run semantic checks
@@ -56,4 +61,6 @@ jobs:
             deep_regular.json
             gate_regular.json
             resolved_dependencies_3152.txt
+            pip_dependency_health_3152.txt
+            KERAS_METADATA_ONLY.txt
           if-no-files-found: warn
