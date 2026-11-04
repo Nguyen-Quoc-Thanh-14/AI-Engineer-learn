@@ -1,0 +1,49 @@
+name: Import verified full Python course source
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - 'source/full-course-536-v31.tar.xz'
+permissions:
+  contents: write
+  actions: write
+jobs:
+  verified-import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Verify 1,919 source SHA-256 hashes and extract
+        run: python scripts/import_course_archive.py
+      - name: Verify exact 441 lessons, 441 demos and 95 B solutions
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('.')
+          a=list(root.glob('03_HOC_PHAN/**/BAI_HOC/*.md'))
+          b=list(root.glob('03_HOC_PHAN/**/MA_MAU/*_demo.py'))
+          c=list(root.glob('31_HOAN_THIEN_LOI_GIAI_V28/*_bai_B_solution.py'))
+          print('SOURCE_VERIFIED',len(a),len(b),len(c))
+          assert (len(a),len(b),len(c))==(441,441,95)
+          PY
+      - name: Commit imported source on audit branch (never main)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- 03_HOC_PHAN 31_HOAN_THIEN_LOI_GIAI_V28 35_KIEM_DINH_CPYTHON_3152 37_KIEM_DINH_V31 GITHUB_PACKAGE_MANIFEST.json GITHUB_REVIEW_MATRIX.csv GITHUB_SOURCE_SHA256.csv GITHUB_UPLOAD_INSTRUCTIONS.md
+          if git diff --cached --quiet; then
+            echo "Nothing new to commit"
+          else
+            git commit -m "test: import sha256-verified 441 lessons 441 demos 95 B solutions"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+      - name: Dispatch full-course CPython 3.15.2 validation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run full-course-3152.yml --ref audit/full-course-536
