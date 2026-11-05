@@ -1,0 +1,30 @@
+name: Structural QA for 441 lessons - not independent expert certification
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - 'tests/curriculum_quality_audit.py'
+      - '03_HOC_PHAN/**'
+      - 'docs/review/**'
+      - '.github/workflows/curriculum-quality-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect-441:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Check source integrity and generate risk signals for each of 441 lessons
+        run: python tests/curriculum_quality_audit.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: course-441-structural-audit-not-peer-review
+          path: evidence/curriculum_quality/
+          if-no-files-found: warn
