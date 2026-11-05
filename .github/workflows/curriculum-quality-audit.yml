@@ -5,6 +5,8 @@ on:
       - audit/full-course-536
     paths:
       - 'tests/curriculum_quality_audit.py'
+      - 'tests/gpu_cuda_3152.py'
+      - 'tests/independent_review_gate.py'
       - '03_HOC_PHAN/**'
       - 'docs/review/**'
       - '.github/workflows/curriculum-quality-audit.yml'
@@ -22,9 +24,29 @@ jobs:
           python-version: '3.15.2'
       - name: Check source integrity and generate risk signals for each of 441 lessons
         run: python tests/curriculum_quality_audit.py
+      - name: Parse the CUDA hardware test and peer-review evidence gate (not running CUDA)
+        run: python -m py_compile tests/gpu_cuda_3152.py tests/independent_review_gate.py
+      - name: Confirm missing human reviewers remain an explicit blocked state
+        shell: bash
+        run: |
+          set +e
+          python tests/independent_review_gate.py
+          result=$?
+          set -e
+          test "$result" -eq 3
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('evidence/independent_review_gate.json').read_text())
+          assert a['academic_certification']=='NOT_GRANTED_AUTOMATICALLY'
+          assert a['review_manifest_state']=='EVIDENCE_PENDING'
+          print('EXPECTED_BLOCK_FOR_MISSING_EXTERNAL_EXPERTS')
+          PY
       - if: always()
         uses: actions/upload-artifact@v4
         with:
           name: course-441-structural-audit-not-peer-review
-          path: evidence/curriculum_quality/
+          path: |
+            evidence/curriculum_quality/
+            evidence/independent_review_gate.json
           if-no-files-found: warn
