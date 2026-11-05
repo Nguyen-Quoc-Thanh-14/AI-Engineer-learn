@@ -19,3 +19,12 @@ N01.01 yêu cầu schema điểm số 0..10 và NaN nhưng bản cũ trả lời
 ## Công cụ
 
 Chạy tests/curriculum_quality_audit.py sẽ sinh ma trận tín hiệu tĩnh cho toàn 441 bài và giữ nguyên trạng thái AWAITING_EXTERNAL_REVIEW. Dữ liệu này là chỉ dẫn phân công, KHÔNG phải phán quyết đúng/sai do chuyên gia.
+
+## Ràng buộc phiếu với nguồn được review
+
+Manifest dùng header trong INDEPENDENT_REVIEW_SIGNOFFS.csv. Ngoài hash bài học và đáp án, bắt buộc điền demo_sha256 của MA_MAU/<mã>_demo.py. Với 95 chương trình B độc lập, điền solution_code_sha256 của 31_HOAN_THIEN_LOI_GIAI_V28/<mã>_bai_B_solution.py; để trống trường này nếu bài không có chương trình B độc lập. Thay đổi bất kỳ tệp đã ký nào làm phiếu cũ mất hiệu lực.
+
+GitHub username được so sánh không phân biệt chữ hoa/thường: hai cách viết cùng một tài khoản chỉ tính một reviewer. Ngày phải hợp lệ và không ở tương lai. Có findings_issue_urls hoặc metadata sửa lỗi thì phải kèm đầy đủ fix_commit_sha (40 ký tự hex) và retest_evidence_url. Chuyên gia vẫn phải đối chiếu rằng commit thực sự sửa đúng lỗi và retest đúng nguồn; kiểm tra cú pháp không tự làm được việc này.
+
+Các ca trong tests/test_evidence_gates.py dùng tên, tệp và ZIP tổng hợp trong thư mục tạm. Chúng kiểm tra hành vi của cổng bằng chứng, không tạo phiếu nghiệm thu thật. Manifest thật vẫn chưa có dòng ACCEPTED; không điền tên hoặc kết quả thay chuyên gia.
+

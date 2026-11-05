@@ -9,3 +9,14 @@ Issue #8: A trusted Linux x64 NVIDIA runner must be registered and labeled gpu, 
 Issue #7: Independent verified human experts must review the lesson, demo and B answer for each of 441 lessons, file rubric and SHA-linked evidence, fix defects and sign off without conflicts. A manifest alone cannot authenticate actual expertise; the final decision is human.
 
 Even with a green automated gate the status is only ELIGIBLE_FOR_HUMAN_FINAL_AUDIT, never ACADEMICALLY_CERTIFIED. Keep the PR draft until the external blockers are genuinely resolved.
+
+## Evidence validation hardening — 05/11/2026
+
+- CUDA eligibility requires the artifact ZIP digest, runtime JSON contents, exact commit/run/attempt, collector hash, successful self-hosted GPU job metadata, runtime versions, device observations and finite numerical results.
+- The latest run on the exact SHA must succeed. An earlier successful run cannot conceal a later failure or queued run.
+- Review records bind lesson, answer, demo and standalone B program hashes. Reviewer logins are case-insensitive; invalid/future dates and findings without fix/retest evidence block eligibility.
+- The release workflow runs adversarial contract tests in a separate CPython 3.15.2 job. They use synthetic temporary fixtures and are not a GPU run or expert review.
+- No human review record or hardware result has been created by these changes. Issue #7 and Issue #8 remain open; PR #4 remains draft and unmerged.
+
+A failing release-readiness job is expected while required evidence is absent. Inspect its JSON for the missing exact-SHA workflows and independent review records; a passing contract-tests job only validates the evidence checker.
+

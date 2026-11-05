@@ -17,3 +17,12 @@ Không dùng mô phỏng GPU, không coi torch==2.15.0+cu132 hoặc nvidia-smi m
 5. Nếu không có GPU hoặc job bị chặn, trạng thái vẫn là NOT_TESTED/NOT_PASSED. Đừng tự xác nhận bằng kết quả CPU hay từ phiên bản gói cài.
 
 **Giới hạn:** kiểm thử một GPU và những phép toán mẫu, không phải benchmark toàn bộ Computer Vision/Deep Learning trên mọi GPU.
+
+## Đối chiếu artifact với đúng lượt chạy
+
+Bộ thu ghi commit_sha từ git HEAD, repository, run_id, run_attempt và source_sha256; từ chối nguồn collector/workflow có thay đổi chưa commit. Workflow giữ yêu cầu CPython 3.15.2, Linux x86_64 và torch 2.15.0; Python chạy với -O bị từ chối vì sẽ bỏ các assert.
+
+Cổng phát hành tải ZIP và đối chiếu digest SHA-256 của artifact do GitHub trả về; đọc gpu_runtime.json, kiểm tra đúng commit/lượt chạy/lần thử và hash bộ thu. Nó còn kiểm tra metadata job self-hosted/linux/x64/gpu, phiên bản, quan sát thiết bị, gradient, đối chiếu convolution CPU/GPU và các chỉ số huấn luyện hữu hạn. Có artifact đúng tên là chưa đủ. Một lần chạy mới bị lỗi hoặc còn chờ sẽ chặn, không dùng lần chạy xanh cũ để thay thế.
+
+Token GitHub chỉ dùng với API GitHub; request tới URL lưu trữ có chữ ký không mang Authorization. Kiểm tra tự động vẫn dựa trên runner tin cậy và không chứng minh toàn bộ chất lượng CV/DL. Các ZIP tổng hợp trong kiểm thử đơn vị không phải bằng chứng đã chạy GPU.
+
