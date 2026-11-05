@@ -28,3 +28,7 @@ GitHub username được so sánh không phân biệt chữ hoa/thường: hai c
 
 Các ca trong tests/test_evidence_gates.py dùng tên, tệp và ZIP tổng hợp trong thư mục tạm. Chúng kiểm tra hành vi của cổng bằng chứng, không tạo phiếu nghiệm thu thật. Manifest thật vẫn chưa có dòng ACCEPTED; không điền tên hoặc kết quả thay chuyên gia.
 
+
+## CI không được tự cản việc phản biện hoàn tất
+
+Structural QA kiểm tra cấu trúc bài học và gọi `independent_review_gate.py` để xác nhận mã trả về phù hợp: `EVIDENCE_PENDING` ↔ mã 3; `RECORDS_COMPLETE_NEEDS_HUMAN_IDENTITY_CHECK` ↔ mã 0. Cả hai trường hợp đều không cấp `ACADEMICALLY_CERTIFIED`. Trước đây workflow chỉ cho phép mã 3, khiến workflow không thể PASS khi chuyên gia đã nộp đầy đủ hồ sơ; lỗi này được sửa để giữ cổng phát hành **có thể đạt khi đủ bằng chứng thật** mà không làm giảm điều kiện kiểm định. Các lỗi liên kết nội bộ, thiếu đáp án/demo, sai mã tiêu đề phải làm Structural QA FAIL; cảnh báo về chất lượng và nguồn phải đi vào danh sách phản biện thủ công.

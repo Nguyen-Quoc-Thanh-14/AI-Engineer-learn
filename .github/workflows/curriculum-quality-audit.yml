@@ -28,21 +28,26 @@ jobs:
         run: python tests/curriculum_quality_audit.py
       - name: Parse the CUDA hardware test and peer-review evidence gate (not running CUDA)
         run: python -m py_compile tests/gpu_cuda_3152.py tests/independent_review_gate.py
-      - name: Confirm missing human reviewers remain an explicit blocked state
+      - name: Validate review manifest gate correctly in either state (without academic approval)
         shell: bash
         run: |
           set +e
           python tests/independent_review_gate.py
-          result=$?
+          gate_rc=$?
           set -e
-          test "$result" -eq 3
-          python - <<'PY'
+          GATE_RETURN_CODE="$gate_rc" python - <<'PY'
           import json
+          import os
           from pathlib import Path
-          a=json.loads(Path('evidence/independent_review_gate.json').read_text())
-          assert a['academic_certification']=='NOT_GRANTED_AUTOMATICALLY'
-          assert a['review_manifest_state']=='EVIDENCE_PENDING'
-          print('EXPECTED_BLOCK_FOR_MISSING_EXTERNAL_EXPERTS')
+          report=json.loads(Path("evidence/independent_review_gate.json").read_text(encoding="utf8"))
+          state=report["review_manifest_state"]
+          rc=int(os.environ["GATE_RETURN_CODE"])
+          assert report["academic_certification"]=="NOT_GRANTED_AUTOMATICALLY"
+          assert (state=="EVIDENCE_PENDING" and rc==3) or (
+              state=="RECORDS_COMPLETE_NEEDS_HUMAN_IDENTITY_CHECK" and rc==0
+          ), (state,rc)
+          # This assertion is about machine-parsable records, not verified human qualifications.
+          print("REVIEW_MANIFEST_STATE_CONSISTENT",state)
           PY
       - if: always()
         uses: actions/upload-artifact@v4

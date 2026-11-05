@@ -11,6 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/"evidence"/"curriculum_quality"
 FENCE=re.compile(r"(?ms)^[ \t]*" + chr(96)*3 + r".*?^[ \t]*" + chr(96)*3 + r"[ \t]*$")
 LINK=re.compile(r"\[[^]\n]+\]\(([^)\n]+)\)")
+BLOCKING_FLAGS={"INVALID_ID","TITLE_MISMATCH","NO_DEMO","NO_ANSWER","BROKEN_LOCAL_LINK"}
 
 def sha(p):
     return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -76,9 +77,16 @@ def run():
     with (OUT/"lessons_441.csv").open("w",encoding="utf8",newline="") as f:
         w=csv.DictWriter(f,fieldnames=rows[0].keys());w.writeheader();w.writerows(rows)
     flagcounts=Counter(flag for r in rows for flag in r["flags"].split(";") if flag)
+    blockers=[{"lesson_id":r["id"],"flags":[f for f in r["flags"].split(";") if f in BLOCKING_FLAGS]}
+              for r in rows if any(f in BLOCKING_FLAGS for f in r["flags"].split(";"))]
+    if blockers:
+        errors.append(f"{len(blockers)} lesson(s) with structural blocking defects")
     report={
         "inventory_integrity":"PASS" if not errors else "FAIL",
         "inventory_errors":errors,
+        "blocking_lesson_count":len(blockers),
+        "blocking_lessons_sample":blockers[:20],
+        "audit_scope":"inventory and structural integrity; flagged lesson quality requires human review",
         "lesson_count":len(lessons),"demo_count":len(demos),"executable_B_count":len(executable),
         "answers_found":sum(bool(r["answer_sha256"]) for r in rows),
         "review_accepted_by_verified_experts":0,
