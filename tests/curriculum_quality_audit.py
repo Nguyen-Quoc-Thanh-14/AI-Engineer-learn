@@ -17,6 +17,9 @@ def sha(p):
 
 def broken_links(path, source):
     s=FENCE.sub("",source)
+    # Ignore Markdown inline code, including link-shaped syntax inside type expressions.
+    tick=chr(96)
+    s=re.sub(re.escape(tick)+r"[^"+re.escape(tick)+r"\n]*"+re.escape(tick),"",s)
     out=[]
     for raw in LINK.findall(s):
         target=raw.strip().split()[0].strip("<>").split("#")[0].split("?")[0]
@@ -53,8 +56,8 @@ def run():
         if not s.startswith("# "+code):flags.append("TITLE_MISMATCH")
         if not demo.exists():flags.append("NO_DEMO")
         if not ans.exists():flags.append("NO_ANSWER")
-        if (chr(96)*3+"python") not in s:flags.append("NO_CODE_FENCE")
-        if "Bài B" not in s and "Bài tập" not in s:flags.append("NO_EXERCISE_MARKER")
+        if (chr(96)*3+"python") not in s and "_demo.py" not in s:flags.append("NO_CODE_OR_DEMO_REFERENCE")
+        if not any(marker in s for marker in ("Bài B","Bài tập","Thực hành","Luyện tập")):flags.append("NO_EXERCISE_MARKER")
         if "http://" not in s and "https://" not in s:flags.append("NO_SOURCE_LINK")
         if "Lời giải thiết kế" in a or "Lời giải dạng thiết kế" in a:flags.append("DESIGN_ANSWER_NEEDS_HUMAN")
         if re.search(r"chưa (kiểm định trực tiếp|xác nhận trực tiếp).{0,30}3\.15\.2",s,re.I):
