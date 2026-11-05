@@ -1,4 +1,6 @@
 name: Course release readiness - blocks without GPU and expert reviews
+# Evidence synchronization checkpoint: changing this workflow triggers CPU, semantic,
+# structural and native workflow paths on the same commit.
 on:
   push:
     branches:

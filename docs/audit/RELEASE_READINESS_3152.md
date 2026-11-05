@@ -29,3 +29,13 @@ For predictable synchronization, changes to `.github/workflows/release-readiness
 Required final order: finish content and reviewer fixes; complete same-SHA CPU/semantic/structural/native checks; run CUDA on a trusted NVIDIA self-hosted runner; verify the human reviews for all 441 lessons; then rerun the readiness verifier on the same SHA and perform the human final audit. Any subsequent change to versioned content or evidence policy requires checking relevant SHA-bound evidence again. The release verifier does not itself award academic certification.
 
 Current blockers remain Issue #7 (human independent reviews) and Issue #8 (actual NVIDIA GPU). Draft PR #4 must remain DRAFT until independently verified.
+
+
+## Tổng hợp các hạng mục còn mở sau hiệu đính nội dung
+
+- **Issue #9 — Content QA:** 97 đáp án dạng thiết kế và 97 mô tả phiên bản được Structural QA gắn cờ, cần đối chiếu nội dung, không đồng nhất với lỗi đã xác minh. N01.02 và N03.01 đã bổ sung kiểm thử riêng; còn các mục khác cần phân công và hiệu đính lần lượt.
+- **Issue #7 — Expert review:** 441 bài, 79 bài rủi ro cao cần thêm lượt thứ hai, tối thiểu 520 lượt đánh giá có danh tính xác thực; hiện chưa có phiếu ký nhận thực tế.
+- **Issue #8 — GPU:** cần Linux x64 runner với NVIDIA GPU, workflow thủ công và artifact CUDA có dữ liệu quan sát đúng phần cứng. Không đánh dấu PASS bằng wheel CUDA hay CPU.
+- **Issue #5 — Keras CPU:** blocker cũ đã được đóng sau khi nghiệm thu Keras/h5py tại Issue #6, không còn là điều kiện phát hành riêng.
+
+**Đồng bộ bằng chứng đúng commit:** Mỗi khi chốt nội dung hoặc chỉnh chính sách kiểm định, thay đổi workflow release-readiness để kích hoạt bốn luồng CPU, semantic, structural và native trên cùng SHA; kiểm tra toàn bộ run và artifact sau khi chúng hoàn tất, rồi mới chạy lại release gate. Release gate tiếp tục BLOCKED tới khi GPU thật và phản biện độc lập có bằng chứng. Không nhầm **chạy thành công** với **chứng nhận học thuật**.
