@@ -26,3 +26,21 @@ Cổng phát hành tải ZIP và đối chiếu digest SHA-256 của artifact do
 
 Token GitHub chỉ dùng với API GitHub; request tới URL lưu trữ có chữ ký không mang Authorization. Kiểm tra tự động vẫn dựa trên runner tin cậy và không chứng minh toàn bộ chất lượng CV/DL. Các ZIP tổng hợp trong kiểm thử đơn vị không phải bằng chứng đã chạy GPU.
 
+
+## Tương thích GPU với môi trường nghiệm thu PyTorch 2.15/CUDA 13.x
+
+**Yêu cầu của bộ kiểm định:** GPU Linux x64 có compute capability **>= 7.5** (Turing hoặc mới hơn). Theo tài liệu NVIDIA, CUDA 13 đã loại bỏ hỗ trợ biên dịch offline và thư viện cho Maxwell/Pascal/Volta. PyTorch 2.15 ngừng cung cấp binary CUDA 12.6 (mốc cuối cho các kiến trúc này). Bộ collector lấy compute capability bằng `torch.cuda.get_device_capability()`, chặn thiết bị không hỗ trợ, đồng thời ghi capability và danh sách kiến trúc PyTorch biên dịch vào artifact; điều kiện thực thi CUDA và huấn luyện thật vẫn bắt buộc.
+
+**Lưu ý Quadro M620:** NVIDIA liệt kê Quadro M620 ở compute capability **5.2 (Maxwell)**, do đó không phù hợp để chạy bộ GPU nghiệm thu yêu cầu PyTorch 2.15/CUDA 13.x. Muốn khảo sát GPU cũ cần một bộ benchmark riêng (phiên bản CUDA/PyTorch cũ) và **không được** dùng kết quả đó thay GPU proof trên CPython 3.15.2 với dependency pinned của giáo trình.
+
+- NVIDIA CC: https://developer.nvidia.com/cuda/gpus/legacy
+- NVIDIA CUDA 13 kiến trúc: https://docs.nvidia.com/cuda/archive/13.0.0/cuda-toolkit-release-notes/
+- PyTorch 2.15 GPU wheel binary support: https://dev-discuss.pytorch.org/t/notice-cuda-12-6-wheels-will-no-longer-be-published-from-pytorch-2-15-drops-maxwell-pascal-volta/3432
+
+### Hướng chọn runner
+
+**Phương án hiện đã cấu hình:** self-hosted Linux x64 GPU Turing+ (T4, RTX 20-series trở lên hoặc các kiến trúc mới hơn nếu đáp ứng driver) với nhãn `gpu`, job được gọi thủ công. **Không chạy trên thiết bị mà người vận hành không sở hữu/không được phép sử dụng.**
+
+**Lựa chọn có tính phí:** GitHub có larger runner NVIDIA T4 cho tổ chức sử dụng GitHub Team hoặc Enterprise Cloud, nhưng repository này hiện thuộc tài khoản cá nhân (không phải organization). Muốn dùng larger GPU runner GitHub cần chủ repository lựa chọn phương án tổ chức, cấu hình thanh toán và điều chỉnh workflow/evidence gate để chấp nhận metadata của GPU hosted thật. **Chưa cấu hình thanh toán, chuyển repo hay kích hoạt chạy GPU.**
+
+Nguồn GitHub: https://docs.github.com/en/actions/concepts/runners/larger-runners

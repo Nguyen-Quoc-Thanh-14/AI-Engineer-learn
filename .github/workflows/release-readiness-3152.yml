@@ -1,4 +1,5 @@
 name: Course release readiness - blocks without GPU and expert reviews
+# Sync same-SHA technical checks when GPU hardware eligibility evidence changes.
 # Evidence synchronization checkpoint: changing this workflow triggers CPU, semantic,
 # structural and native workflow paths on the same commit.
 on:

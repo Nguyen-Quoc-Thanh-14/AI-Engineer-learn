@@ -51,7 +51,11 @@ def run():
     assert torch.cuda.device_count()>=1
     device=torch.device("cuda:0")
     props=torch.cuda.get_device_properties(device)
+    capability=torch.cuda.get_device_capability(device)
     assert props.total_memory>0
+    # PyTorch 2.15 CUDA 13.x binary wheels no longer support pre-Turing architectures.
+    assert capability >= (7,5), ("GPU compute capability below 7.5 is unsupported "
+                                  "by pinned PyTorch 2.15 CUDA binaries",capability)
     torch.manual_seed(3152)
     torch.set_num_threads(1)
     # Deterministic analytical gradient on *actual* CUDA tensors.
@@ -95,6 +99,8 @@ def run():
         "platform_machine":platform.machine(),"cuda_available":True,
         "torch_version":torch.__version__,"torch_cuda_runtime":torch.version.cuda,
         "device_name":props.name,"device_memory_bytes":props.total_memory,
+        "device_compute_capability":list(capability),
+        "torch_cuda_arches":torch.cuda.get_arch_list(),
         "nvidia_smi":query.stdout.strip(),
         "analytic_gradient_observed":cuda_x.grad.detach().cpu().tolist(),
         "convolution_cpu_gpu_close":True,

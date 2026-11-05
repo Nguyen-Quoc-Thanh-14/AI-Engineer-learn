@@ -148,6 +148,14 @@ def validate_cuda_artifact(archive, artifact, run, source_sha256, repository):
             "Missing NVIDIA hardware observations")
     memory = observed.get("device_memory_bytes")
     require(type(memory) is int and memory > 0, "Invalid device memory observation")
+    capability=observed.get("device_compute_capability")
+    require(isinstance(capability,list) and len(capability)==2
+            and all(type(x) is int and x>=0 for x in capability)
+            and tuple(capability)>=(7,5),
+            "GPU compute capability is missing, malformed or unsupported by PyTorch 2.15")
+    architectures=observed.get("torch_cuda_arches")
+    require(isinstance(architectures,list) and all(isinstance(x,str) for x in architectures),
+            "Missing or invalid compiled PyTorch architecture metadata")
     require(observed.get("analytic_gradient_observed") == [-4.0, 0.0, 6.0], "Wrong CUDA gradient")
     require(observed.get("convolution_cpu_gpu_close") is True, "Missing CPU/GPU convolution comparison")
     initial, final, prediction = (observed.get(k) for k in ("initial_mse", "final_mse", "prediction_x3"))

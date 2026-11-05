@@ -166,6 +166,7 @@ class CudaArtifactTests(unittest.TestCase):
             "cuda_available": True, "torch_cuda_runtime": "SYNTHETIC",
             "device_name": "SYNTHETIC TEST DEVICE, NOT HARDWARE EVIDENCE",
             "device_memory_bytes": 1024, "nvidia_smi": "SYNTHETIC CONTRACT FIXTURE ONLY",
+            "device_compute_capability": [7,5], "torch_cuda_arches": ["sm_75"],
             "analytic_gradient_observed": [-4.0, 0.0, 6.0],
             "convolution_cpu_gpu_close": True, "initial_mse": 9.0, "final_mse": 0.001,
             "prediction_x3": 6.999}
@@ -217,6 +218,8 @@ class CudaArtifactTests(unittest.TestCase):
             ("torch_version", "2.14.0"), ("platform_system", "Windows"),
             ("cuda_available", False), ("torch_cuda_runtime", None),
             ("device_name", ""), ("device_memory_bytes", 0), ("nvidia_smi", ""),
+            ("device_compute_capability", [5,2]), ("device_compute_capability", [7]),
+            ("device_compute_capability", ["7","5"]), ("torch_cuda_arches", None),
             ("analytic_gradient_observed", [0, 0, 0]), ("convolution_cpu_gpu_close", False),
             ("initial_mse", float("nan")), ("final_mse", float("inf")),
             ("final_mse", -1.0), ("final_mse", 2.0), ("prediction_x3", 0.0)):
