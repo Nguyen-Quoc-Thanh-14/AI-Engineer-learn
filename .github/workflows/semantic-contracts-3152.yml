@@ -11,6 +11,8 @@ on:
       - 'tests/application_contracts_batch_3152.py'
       - 'tests/application_contracts_batch2_3152.py'
       - '.github/workflows/semantic-contracts-3152.yml'
+      # Re-evaluate all technical evidence whenever the release-gate contract changes.
+      - '.github/workflows/release-readiness-3152.yml'
   workflow_dispatch:
 permissions:
   contents: read

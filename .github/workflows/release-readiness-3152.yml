@@ -11,6 +11,11 @@ on:
       - '.github/workflows/gpu-self-hosted-3152.yml'
       - '.github/workflows/release-readiness-3152.yml'
       - 'docs/review/INDEPENDENT_REVIEW_SIGNOFFS.csv'
+      - '.github/workflows/full-course-3152.yml'
+      - '.github/workflows/semantic-contracts-3152.yml'
+      - '.github/workflows/curriculum-quality-audit.yml'
+      - '.github/workflows/course-native-pr02-3152.yml'
+      - 'docs/audit/RELEASE_READINESS_3152.md'
   workflow_dispatch:
 permissions:
   contents: read

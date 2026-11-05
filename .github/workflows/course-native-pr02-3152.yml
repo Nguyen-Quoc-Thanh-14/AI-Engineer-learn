@@ -6,6 +6,8 @@ on:
     paths:
       - '03_HOC_PHAN/PR/PR02/LAB_NATIVE_ABI3T/**'
       - '.github/workflows/course-native-pr02-3152.yml'
+      # Re-evaluate all technical evidence whenever the release-gate contract changes.
+      - '.github/workflows/release-readiness-3152.yml'
   workflow_dispatch:
 permissions:
   contents: read

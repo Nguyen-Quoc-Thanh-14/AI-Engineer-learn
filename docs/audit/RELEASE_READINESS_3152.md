@@ -20,3 +20,12 @@ Even with a green automated gate the status is only ELIGIBLE_FOR_HUMAN_FINAL_AUD
 
 A failing release-readiness job is expected while required evidence is absent. Inspect its JSON for the missing exact-SHA workflows and independent review records; a passing contract-tests job only validates the evidence checker.
 
+## Same-commit evidence refresh policy (2026-11-05)
+
+The course certification gate uses the **exact 40-hex commit SHA** of Draft PR #4. Success at an earlier commit does not validate a newer commit. CPU, semantic, structural, and native workflows must each finish successfully on the same audit-branch head. The release readiness workflow needs to be rechecked **after** those runs finish; otherwise a race can make `workflow_cpu`, `workflow_semantic`, or `workflow_native` appear false even while an eligible run is executing.
+
+For predictable synchronization, changes to `.github/workflows/release-readiness-3152.yml` now trigger all four technical workflows. Changes to those workflows also trigger release readiness. A technical result is not accepted until its own workflow is completed, successful, and tied to the same SHA. A failed gate is expected when GPU or verified human reviewer evidence is absent; **do not weaken the gate to turn the status green**.
+
+Required final order: finish content and reviewer fixes; complete same-SHA CPU/semantic/structural/native checks; run CUDA on a trusted NVIDIA self-hosted runner; verify the human reviews for all 441 lessons; then rerun the readiness verifier on the same SHA and perform the human final audit. Any subsequent change to versioned content or evidence policy requires checking relevant SHA-bound evidence again. The release verifier does not itself award academic certification.
+
+Current blockers remain Issue #7 (human independent reviews) and Issue #8 (actual NVIDIA GPU). Draft PR #4 must remain DRAFT until independently verified.
