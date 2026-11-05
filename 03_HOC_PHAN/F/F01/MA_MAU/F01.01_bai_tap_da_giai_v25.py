@@ -1,29 +1,29 @@
-# -*- coding: utf-8 -*-
-# Bài tập được giải riêng — Python v2.5
-import importlib
+"""F01.01 corrected: import statistics and calculate mean of nonempty numbers."""
 import math
-import sys
+import statistics
 
-def square_root(x):
-    if type(x) not in (int, float):
-        raise TypeError('cần số')
-    if x < 0:
-        raise ValueError('căn thực không xác định cho số âm')
-    module = importlib.import_module('math')
-    return module.sqrt(x)
+def nonempty_mean(values: list[int | float]) -> float:
+    if not isinstance(values,list):
+        raise TypeError("values must be a list")
+    if not values:
+        raise ValueError("mean of empty list is undefined")
+    if any(type(v) not in (int,float) or not (0<=v or v<0) or
+           (type(v) is float and not math.isfinite(v)) for v in values):
+        raise ValueError("only finite int/float values allowed, excluding bool")
+    return float(statistics.mean(values))
 
 def check():
-    assert square_root(9) == 3.0
-    assert square_root(0) == 0.0
-    assert importlib.import_module('math') is math
-    assert sys.modules['math'] is math
-    try: square_root(-1)
-    except ValueError: pass
-    else: raise AssertionError('miền âm')
-    try: importlib.import_module('not_a_real_module_93486')
-    except ModuleNotFoundError: pass
-    else: raise AssertionError('module không tồn tại')
-
-if __name__ == '__main__':
+    assert nonempty_mean([1,2,3])==2.0
+    assert nonempty_mean([-4,4])==0.0
+    assert nonempty_mean([5])==5.0
+    assert nonempty_mean([0,0,0])==0.0
+    for bad in ([], [float("nan")], [float("inf")], [True,1], ["3",5]):
+        try:nonempty_mean(bad)
+        except ValueError:pass
+        else:raise AssertionError(repr(bad))
+    try:nonempty_mean((1,2))
+    except TypeError:pass
+    else:raise AssertionError("not a list")
+if __name__=="__main__":
     check()
-    print('OK F01.01', square_root(9))
+    print("PASS F01.01 mean")

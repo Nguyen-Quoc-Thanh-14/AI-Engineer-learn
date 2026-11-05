@@ -1,29 +1,27 @@
-# -*- coding: utf-8 -*-
-# Bài tập được giải riêng — Python v2.5
+"""PR01.01 corrected: Structure c_double, sizeof and native alignment."""
 import ctypes
 
-def copy_bytes(payload: bytes, capacity: int) -> bytes:
-    if not isinstance(payload, bytes):
-        raise TypeError('payload phải là bytes')
-    if type(capacity) is not int or capacity < 0:
-        raise ValueError('capacity phải là int không âm')
-    if len(payload) > capacity:
-        raise ValueError('buffer không đủ chứa dữ liệu')
-    buf = ctypes.create_string_buffer(capacity if capacity else 1)
-    if payload:
-        ctypes.memmove(buf, payload, len(payload))
-    return buf.raw[:len(payload)]
+class Point(ctypes.Structure):
+    _fields_ = [("x",ctypes.c_int),("y",ctypes.c_double)]
 
+def layout():
+    return {"size":ctypes.sizeof(Point),
+            "alignment":ctypes.alignment(Point),
+            "x_offset":Point.x.offset,
+            "y_offset":Point.y.offset,
+            "c_int_size":ctypes.sizeof(ctypes.c_int),
+            "c_double_size":ctypes.sizeof(ctypes.c_double),
+            "c_double_alignment":ctypes.alignment(ctypes.c_double)}
 def check():
-    assert copy_bytes(b'abc', 3) == b'abc'
-    assert copy_bytes(b'', 0) == b''
-    try: copy_bytes(b'over', 1)
-    except ValueError: pass
-    else: raise AssertionError('phải chặn overflow')
-    try: copy_bytes('text', 10)
-    except TypeError: pass
-    else: raise AssertionError('sai kiểu')
-
-if __name__ == '__main__':
+    p=Point(7,1.25)
+    assert p.x==7 and p.y==1.25
+    d=layout()
+    assert d["x_offset"]==0
+    assert d["y_offset"]>=d["c_int_size"]
+    assert d["y_offset"]%d["c_double_alignment"]==0
+    assert d["size"]>=d["y_offset"]+d["c_double_size"]
+    assert d["size"]%d["alignment"]==0
+    assert d["alignment"]>=d["c_double_alignment"]
+if __name__=="__main__":
     check()
-    print('OK PR01.01')
+    print("PASS PR01.01",layout())
