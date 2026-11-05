@@ -8,6 +8,8 @@ on:
       - 'tests/highrisk_contracts_3152.py'
       - 'tests/security_pedagogy_lint_3152.py'
       - '03_HOC_PHAN/N/N01/**'
+      - '03_HOC_PHAN/N/N03/**'
+      - 'tests/fault_policy_n0301_3152.py'
       - '03_HOC_PHAN/**/MA_MAU/*_bai_tap_da_giai_v25.py'
       - 'tests/application_contracts_batch_3152.py'
       - 'tests/application_contracts_batch2_3152.py'
@@ -31,6 +33,8 @@ jobs:
         run: python tests/semantic_contracts_3152.py
       - name: Verify threat-model lesson N01.02 does not frame attacks as recommended techniques
         run: python -m unittest discover -s tests -p 'security_pedagogy_lint_3152.py' -v
+      - name: Verify N03.01 outage decision table against independent functional tests
+        run: python tests/fault_policy_n0301_3152.py
       - name: Verify corrected N01.01 exercise against adversarial cases
         run: python tests/highrisk_contracts_3152.py
       - name: Validate 7 corrected application answers against independent functional oracles
@@ -44,6 +48,7 @@ jobs:
           path: |
             evidence/semantic_contracts_3152.json
             evidence/highrisk_application_contracts.json
+            evidence/fault_policy_n0301_3152.json
             evidence/application_contracts_batch_3152.json
             evidence/application_contracts_batch2_3152.json
           if-no-files-found: warn
