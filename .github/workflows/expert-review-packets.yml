@@ -1,0 +1,33 @@
+name: Generate 441 source-bound independent review assignments (not certification)
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - '03_HOC_PHAN/**'
+      - '31_HOAN_THIEN_LOI_GIAI_V28/**'
+      - 'tests/generate_expert_review_packets.py'
+      - 'tests/test_generate_expert_review_packets.py'
+      - '.github/workflows/expert-review-packets.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prepare-expert-review-assignments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Negative tests and integrity checks for packet generation
+        run: python -m unittest discover -s tests -p 'test_generate_expert_review_packets.py' -v
+      - name: Generate unsigned 520 human-review slots with source checksums
+        run: python tests/generate_expert_review_packets.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-expert-review-assignments-not-certification
+          path: evidence/expert_review_packets/
+          if-no-files-found: warn
