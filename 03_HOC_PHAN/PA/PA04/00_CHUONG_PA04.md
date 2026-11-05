@@ -1,0 +1,346 @@
+# Chương PA04
+
+> Bản đọc gộp v2.5, sinh trực tiếp từ file bài học.
+
+## Nội dung các bài học — đồng bộ v2.5
+
+
+---
+
+# PA04.01 — Idempotent scripts và dry-run
+
+> **Trạng thái biên soạn:** BẢN THẢO CHUYÊN BIỆT CÓ NỘI DUNG; ĐÃ CHẠY ĐẠT — Python 3.13.5. **Chưa phản biện sư phạm độc lập.**  
+> **Giai đoạn:** GD6 · **Chương:** PA04 — Tự động hóa an toàn và có thể kiểm tra · **Python đích:** CPython 3.15.2.
+
+## 1. Điều kiện tiên quyết và chuẩn đầu ra
+
+**Tiên quyết:** F, G, H, M02. Trước bài này, cần nắm khái niệm đã dùng trong chương.
+
+Sau bài học, bạn phải làm được: (i) giải thích **Idempotent scripts và dry-run** không cần nhìn mã; (ii) dự đoán đầu ra và diễn giải từng bước; (iii) sửa/áp dụng ví dụ; (iv) nêu được một giới hạn, một lỗi biên và phương pháp kiểm chứng.
+
+## 2. Khái niệm và vì sao cần học
+
+Idempotency giúp chạy script nhiều lần mà hiệu ứng cuối giống một lần; dry-run cho biết hành động sẽ thực hiện.
+
+**Ngữ cảnh thực tế:** Trong chương **Tự động hóa an toàn và có thể kiểm tra**, nội dung này giúp quyết định cách thiết kế/kiểm tra giải pháp khi dự án có đầu vào hoặc yêu cầu thay đổi. Không chọn kỹ thuật chỉ vì cú pháp ngắn; cần xem tính đúng, độ rõ ràng và hành vi lỗi.
+
+## 3. Cơ chế — mô hình thực thi
+
+Dùng deterministic keys, so trạng thái hiện tại với đích rồi mới mutate.
+
+**Quy trình phân tích:** Xác định dữ liệu đầu vào và điều kiện hợp lệ → theo dõi thứ tự đánh giá và thay đổi trạng thái → kiểm tra kết quả đầu ra và exception → đối chiếu với contract, không chỉ với một lần chạy.
+
+## 4. Ví dụ độc lập, có assertion
+
+```python
+def ensure_tag(tags,name):
+    if name not in tags:tags.append(name)
+    return tags
+a=[];ensure_tag(a,'ok');ensure_tag(a,'ok')
+assert a==['ok']
+```
+
+**Trạng thái thực thi:** ĐÃ CHẠY ĐẠT — Python 3.13.5. Mã nguồn độc lập tại [`PA04.01_demo.py`](MA_MAU/PA04.01_demo.py). `assert` trong ví dụ dùng làm phép thử minh họa, không thay thế test suite đầy đủ.
+
+**Cách tự học với ví dụ:** Che phần assertion cuối, dự đoán kết quả theo cơ chế phần 3; sau đó chạy và so sánh. Thử thay một input hợp lệ và một input vi phạm contract.
+
+## 5. Trường hợp biên và lỗi thường gặp
+
+Không biến retry thành hàng loạt email/thanh toán trùng.
+
+**Bảng kiểm tự thực hiện:**
+
+| Tình huống | Cần kiểm tra |
+|---|---|
+| Đầu vào thường | Hành vi đúng hợp đồng; không phát sinh side effect không dự kiến |
+| Đầu vào rỗng/giá trị biên | Cách trả kết quả, lỗi và fallback có được mô tả? |
+| Đầu vào sai/ngoài miền | Có từ chối rõ ràng, không gây mất dữ liệu hay lộ thông tin? |
+
+## 6. Bài tập tự làm
+
+**Bài A — Phân tích:** Tự giải thích kết quả của đoạn mã ở phần 4, nêu rõ ít nhất hai bước thực thi và kiểm tra trường hợp biên.
+
+**Bài B — Ứng dụng:** Xây file renamer có collision handling và dry-run.
+
+**Bài C — Phản biện:** Thử một giải pháp thay thế, so sánh về tính đúng, chi phí bảo trì/hiệu năng và độ an toàn trong tình huống có input không tin cậy.
+
+**Bài D — Kiểm thử:** Viết tối thiểu ba ca thử, trong đó có một ca sai đầu vào; lưu thành `test_PA04_01.py`. Không viết `except: pass` để che lỗi.
+
+## 7. Hướng dẫn giải và tiêu chí đạt
+
+[Mở hướng dẫn / lời giải mẫu](LOI_GIAI/PA04.01_loi_giai.md). **Tình trạng:** mẫu tham khảo; lời giải bài vận dụng chưa được kiểm định.
+
+Chỉ tự công nhận đạt khi: (1) giải thích đúng khái niệm và giới hạn; (2) dự đoán đúng ví dụ trước khi chạy; (3) bài B chạy với ít nhất ba ca thử có assertions cụ thể; (4) có thể giải thích vì sao chọn cách làm này thay cho giải pháp khác.
+
+## 8. Tài liệu kiểm chứng
+
+- S01: Python Crash Course (nguồn người dùng cung cấp; tra trong thư mục tài liệu gốc)
+- [R04: Python Standard Library 3.15](https://docs.python.org/3.15/library/)
+- [R11: Python Packaging User Guide](https://packaging.python.org/en/latest/)
+- [R20: uv Documentation](https://docs.astral.sh/uv/)
+
+**Ghi chú:** Nguồn dùng để đối chiếu khái niệm và các mốc phiên bản, không hàm ý toàn bộ ví dụ trong bài có trong tài liệu gốc. Nếu có tính năng phụ thuộc phiên bản hoặc thư viện ngoài, phải chạy lại trên môi trường thực tế trước khi nâng trạng thái xuất bản.
+
+---
+
+## 11. Bài chuyên sâu bổ sung v2.5 — kiểm định bằng chương trình thực thi
+
+> **Kết quả:** Đã chạy thành công lời giải độc lập trên Python 3.13.5 tại thời điểm xuất bản v2.5. **Chưa kiểm định trực tiếp trên CPython 3.15.2; chưa qua phản biện sư phạm độc lập.**
+
+### Nguyên lý cần nắm
+
+Dry-run tạo kế hoạch thay đổi trước khi ghi dữ liệu; idempotency là thuộc tính của toàn bộ thao tác: chạy lần thứ hai với cùng dữ liệu không tạo thêm thay đổi ngoài ý muốn.
+
+### Cách suy luận và thiết kế lời giải
+
+Xây danh sách đổi đuôi .TXT thành .txt mà không thực hiện ngay, và từ chối nếu đích đã tồn tại. Khi apply=True, dùng cùng kế hoạch đã xác minh. Việc kiểm tra tồn tại trước khi rename giảm lỗi phổ biến, nhưng không loại bỏ hoàn toàn race giữa lúc kiểm tra và thực hiện.
+
+### Phản ví dụ và ngộ nhận cần tránh
+
+Không nhầm việc chạy script hai lần không phát exception với idempotency: phải so sánh trạng thái file đầu/cuối. Đừng tự động ghi đè file trùng tên.
+
+### Lộ trình tự kiểm tra
+
+1. Đọc yêu cầu bài tập ở trên, tự viết lời giải **trước khi mở đáp án**.
+2. Dự đoán đầu ra các trường hợp bình thường, biên và không hợp lệ; nói rõ từng precondition, hậu điều kiện.
+3. Chạy mã độc lập [`PA04.01_bai_tap_da_giai_v25.py`](MA_MAU/PA04.01_bai_tap_da_giai_v25.py) để đối chiếu.
+4. Kiểm tra lời giải chi tiết: [`PA04.01_loi_giai.md`](LOI_GIAI/PA04.01_loi_giai.md).
+5. **Bài mở rộng:** Giải quyết bài toán cạnh tranh trong môi trường nhiều tiến trình bằng thao tác nguyên tử phù hợp với hệ điều hành và báo cáo rollback.
+
+**Nguồn kỹ thuật chính thức:** https://docs.python.org/3.15/library/pathlib.html. Tài liệu được dùng để đối chiếu API/cơ chế, không phải nguồn sao chép nguyên văn bài này.
+
+
+---
+
+# PA04.02 — Tác vụ chạy lịch, retry và observability
+
+> **Trạng thái biên soạn:** BẢN THẢO CHUYÊN BIỆT CÓ NỘI DUNG; ĐÃ CHẠY ĐẠT — Python 3.13.5. **Chưa phản biện sư phạm độc lập.**  
+> **Giai đoạn:** GD6 · **Chương:** PA04 — Tự động hóa an toàn và có thể kiểm tra · **Python đích:** CPython 3.15.2.
+
+## 1. Điều kiện tiên quyết và chuẩn đầu ra
+
+**Tiên quyết:** F, G, H, M02. Trước bài này, cần nắm khái niệm đã dùng trong chương.
+
+Sau bài học, bạn phải làm được: (i) giải thích **Tác vụ chạy lịch, retry và observability** không cần nhìn mã; (ii) dự đoán đầu ra và diễn giải từng bước; (iii) sửa/áp dụng ví dụ; (iv) nêu được một giới hạn, một lỗi biên và phương pháp kiểm chứng.
+
+## 2. Khái niệm và vì sao cần học
+
+Lịch chạy, retry và observability phải có heartbeat, deadline, idempotency và alert.
+
+**Ngữ cảnh thực tế:** Trong chương **Tự động hóa an toàn và có thể kiểm tra**, nội dung này giúp quyết định cách thiết kế/kiểm tra giải pháp khi dự án có đầu vào hoặc yêu cầu thay đổi. Không chọn kỹ thuật chỉ vì cú pháp ngắn; cần xem tính đúng, độ rõ ràng và hành vi lỗi.
+
+## 3. Cơ chế — mô hình thực thi
+
+Ghi trạng thái chạy lần gần nhất và số lần thất bại; exponential backoff cho network faults.
+
+**Quy trình phân tích:** Xác định dữ liệu đầu vào và điều kiện hợp lệ → theo dõi thứ tự đánh giá và thay đổi trạng thái → kiểm tra kết quả đầu ra và exception → đối chiếu với contract, không chỉ với một lần chạy.
+
+## 4. Ví dụ độc lập, có assertion
+
+```python
+def schedule_status(attempts,limit=3):return 'retry' if attempts<limit else 'failed'
+assert schedule_status(1)=='retry'
+assert schedule_status(3)=='failed'
+```
+
+**Trạng thái thực thi:** ĐÃ CHẠY ĐẠT — Python 3.13.5. Mã nguồn độc lập tại [`PA04.02_demo.py`](MA_MAU/PA04.02_demo.py). `assert` trong ví dụ dùng làm phép thử minh họa, không thay thế test suite đầy đủ.
+
+**Cách tự học với ví dụ:** Che phần assertion cuối, dự đoán kết quả theo cơ chế phần 3; sau đó chạy và so sánh. Thử thay một input hợp lệ và một input vi phạm contract.
+
+## 5. Trường hợp biên và lỗi thường gặp
+
+Đừng retry vô hạn trong scheduler và cho rằng job vẫn lành mạnh.
+
+**Bảng kiểm tự thực hiện:**
+
+| Tình huống | Cần kiểm tra |
+|---|---|
+| Đầu vào thường | Hành vi đúng hợp đồng; không phát sinh side effect không dự kiến |
+| Đầu vào rỗng/giá trị biên | Cách trả kết quả, lỗi và fallback có được mô tả? |
+| Đầu vào sai/ngoài miền | Có từ chối rõ ràng, không gây mất dữ liệu hay lộ thông tin? |
+
+## 6. Bài tập tự làm
+
+**Bài A — Phân tích:** Tự giải thích kết quả của đoạn mã ở phần 4, nêu rõ ít nhất hai bước thực thi và kiểm tra trường hợp biên.
+
+**Bài B — Ứng dụng:** Thiết kế job heartbeat và thông báo khi ba lần chạy liên tiếp thất bại.
+
+**Bài C — Phản biện:** Thử một giải pháp thay thế, so sánh về tính đúng, chi phí bảo trì/hiệu năng và độ an toàn trong tình huống có input không tin cậy.
+
+**Bài D — Kiểm thử:** Viết tối thiểu ba ca thử, trong đó có một ca sai đầu vào; lưu thành `test_PA04_02.py`. Không viết `except: pass` để che lỗi.
+
+## 7. Hướng dẫn giải và tiêu chí đạt
+
+[Mở hướng dẫn / lời giải mẫu](LOI_GIAI/PA04.02_loi_giai.md). **Tình trạng:** mẫu tham khảo; lời giải bài vận dụng chưa được kiểm định.
+
+Chỉ tự công nhận đạt khi: (1) giải thích đúng khái niệm và giới hạn; (2) dự đoán đúng ví dụ trước khi chạy; (3) bài B chạy với ít nhất ba ca thử có assertions cụ thể; (4) có thể giải thích vì sao chọn cách làm này thay cho giải pháp khác.
+
+## 8. Tài liệu kiểm chứng
+
+- S01: Python Crash Course (nguồn người dùng cung cấp; tra trong thư mục tài liệu gốc)
+- [R04: Python Standard Library 3.15](https://docs.python.org/3.15/library/)
+- [R11: Python Packaging User Guide](https://packaging.python.org/en/latest/)
+- [R20: uv Documentation](https://docs.astral.sh/uv/)
+
+**Ghi chú:** Nguồn dùng để đối chiếu khái niệm và các mốc phiên bản, không hàm ý toàn bộ ví dụ trong bài có trong tài liệu gốc. Nếu có tính năng phụ thuộc phiên bản hoặc thư viện ngoài, phải chạy lại trên môi trường thực tế trước khi nâng trạng thái xuất bản.
+
+
+---
+
+# PA04.03 — File system watchers và concurrency boundaries
+
+> **Trạng thái biên soạn:** BẢN THẢO CHUYÊN BIỆT CÓ NỘI DUNG; ĐÃ CHẠY ĐẠT — Python 3.13.5. **Chưa phản biện sư phạm độc lập.**  
+> **Giai đoạn:** GD6 · **Chương:** PA04 — Tự động hóa an toàn và có thể kiểm tra · **Python đích:** CPython 3.15.2.
+
+## 1. Điều kiện tiên quyết và chuẩn đầu ra
+
+**Tiên quyết:** F, G, H, M02. Trước bài này, cần nắm khái niệm đã dùng trong chương.
+
+Sau bài học, bạn phải làm được: (i) giải thích **File system watchers và concurrency boundaries** không cần nhìn mã; (ii) dự đoán đầu ra và diễn giải từng bước; (iii) sửa/áp dụng ví dụ; (iv) nêu được một giới hạn, một lỗi biên và phương pháp kiểm chứng.
+
+## 2. Khái niệm và vì sao cần học
+
+File watcher nhận sự kiện thay đổi có thể bị lặp/đảo thứ tự; cần debounce và bảo đảm file đã ghi xong.
+
+**Ngữ cảnh thực tế:** Trong chương **Tự động hóa an toàn và có thể kiểm tra**, nội dung này giúp quyết định cách thiết kế/kiểm tra giải pháp khi dự án có đầu vào hoặc yêu cầu thay đổi. Không chọn kỹ thuật chỉ vì cú pháp ngắn; cần xem tính đúng, độ rõ ràng và hành vi lỗi.
+
+## 3. Cơ chế — mô hình thực thi
+
+Đưa event vào bounded queue và xử lý idempotent, tránh thao tác trên partial files.
+
+**Quy trình phân tích:** Xác định dữ liệu đầu vào và điều kiện hợp lệ → theo dõi thứ tự đánh giá và thay đổi trạng thái → kiểm tra kết quả đầu ra và exception → đối chiếu với contract, không chỉ với một lần chạy.
+
+## 4. Ví dụ độc lập, có assertion
+
+```python
+from collections import deque
+events=deque(['x','x','y']);seen=set();out=[]
+while events:
+    p=events.popleft()
+    if p not in seen:seen.add(p);out.append(p)
+assert out==['x','y']
+```
+
+**Trạng thái thực thi:** ĐÃ CHẠY ĐẠT — Python 3.13.5. Mã nguồn độc lập tại [`PA04.03_demo.py`](MA_MAU/PA04.03_demo.py). `assert` trong ví dụ dùng làm phép thử minh họa, không thay thế test suite đầy đủ.
+
+**Cách tự học với ví dụ:** Che phần assertion cuối, dự đoán kết quả theo cơ chế phần 3; sau đó chạy và so sánh. Thử thay một input hợp lệ và một input vi phạm contract.
+
+## 5. Trường hợp biên và lỗi thường gặp
+
+Không giả định file watcher luôn phát đúng một event mỗi thay đổi.
+
+**Bảng kiểm tự thực hiện:**
+
+| Tình huống | Cần kiểm tra |
+|---|---|
+| Đầu vào thường | Hành vi đúng hợp đồng; không phát sinh side effect không dự kiến |
+| Đầu vào rỗng/giá trị biên | Cách trả kết quả, lỗi và fallback có được mô tả? |
+| Đầu vào sai/ngoài miền | Có từ chối rõ ràng, không gây mất dữ liệu hay lộ thông tin? |
+
+## 6. Bài tập tự làm
+
+**Bài A — Phân tích:** Tự giải thích kết quả của đoạn mã ở phần 4, nêu rõ ít nhất hai bước thực thi và kiểm tra trường hợp biên.
+
+**Bài B — Ứng dụng:** Thiết kế debounce 200ms và xử lý file rename an toàn.
+
+**Bài C — Phản biện:** Thử một giải pháp thay thế, so sánh về tính đúng, chi phí bảo trì/hiệu năng và độ an toàn trong tình huống có input không tin cậy.
+
+**Bài D — Kiểm thử:** Viết tối thiểu ba ca thử, trong đó có một ca sai đầu vào; lưu thành `test_PA04_03.py`. Không viết `except: pass` để che lỗi.
+
+## 7. Hướng dẫn giải và tiêu chí đạt
+
+[Mở hướng dẫn / lời giải mẫu](LOI_GIAI/PA04.03_loi_giai.md). **Tình trạng:** mẫu tham khảo; lời giải bài vận dụng chưa được kiểm định.
+
+Chỉ tự công nhận đạt khi: (1) giải thích đúng khái niệm và giới hạn; (2) dự đoán đúng ví dụ trước khi chạy; (3) bài B chạy với ít nhất ba ca thử có assertions cụ thể; (4) có thể giải thích vì sao chọn cách làm này thay cho giải pháp khác.
+
+## 8. Tài liệu kiểm chứng
+
+- S01: Python Crash Course (nguồn người dùng cung cấp; tra trong thư mục tài liệu gốc)
+- [R04: Python Standard Library 3.15](https://docs.python.org/3.15/library/)
+- [R11: Python Packaging User Guide](https://packaging.python.org/en/latest/)
+- [R20: uv Documentation](https://docs.astral.sh/uv/)
+
+**Ghi chú:** Nguồn dùng để đối chiếu khái niệm và các mốc phiên bản, không hàm ý toàn bộ ví dụ trong bài có trong tài liệu gốc. Nếu có tính năng phụ thuộc phiên bản hoặc thư viện ngoài, phải chạy lại trên môi trường thực tế trước khi nâng trạng thái xuất bản.
+
+
+---
+
+# PA04.04 — Đóng gói ứng dụng automation dùng Python 3.15
+
+> **Trạng thái biên soạn:** BẢN THẢO CHUYÊN BIỆT CÓ NỘI DUNG; ĐÃ CHẠY ĐẠT — Python 3.13.5. **Chưa phản biện sư phạm độc lập.**  
+> **Giai đoạn:** GD6 · **Chương:** PA04 — Tự động hóa an toàn và có thể kiểm tra · **Python đích:** CPython 3.15.2.
+
+## 1. Điều kiện tiên quyết và chuẩn đầu ra
+
+**Tiên quyết:** F, G, H, M02. Trước bài này, cần nắm khái niệm đã dùng trong chương.
+
+Sau bài học, bạn phải làm được: (i) giải thích **Đóng gói ứng dụng automation dùng Python 3.15** không cần nhìn mã; (ii) dự đoán đầu ra và diễn giải từng bước; (iii) sửa/áp dụng ví dụ; (iv) nêu được một giới hạn, một lỗi biên và phương pháp kiểm chứng.
+
+## 2. Khái niệm và vì sao cần học
+
+Automation phát hành cho Python 3.15 cần wheels/lock phù hợp và cấu hình sạch, không phụ thuộc CWD.
+
+**Ngữ cảnh thực tế:** Trong chương **Tự động hóa an toàn và có thể kiểm tra**, nội dung này giúp quyết định cách thiết kế/kiểm tra giải pháp khi dự án có đầu vào hoặc yêu cầu thay đổi. Không chọn kỹ thuật chỉ vì cú pháp ngắn; cần xem tính đúng, độ rõ ràng và hành vi lỗi.
+
+## 3. Cơ chế — mô hình thực thi
+
+Chạy trên fresh venv, thiết lập entrypoint, platform tests và release notes.
+
+**Quy trình phân tích:** Xác định dữ liệu đầu vào và điều kiện hợp lệ → theo dõi thứ tự đánh giá và thay đổi trạng thái → kiểm tra kết quả đầu ra và exception → đối chiếu với contract, không chỉ với một lần chạy.
+
+## 4. Ví dụ độc lập, có assertion
+
+```python
+import sys
+assert sys.version_info.major==3
+```
+
+**Trạng thái thực thi:** ĐÃ CHẠY ĐẠT — Python 3.13.5. Mã nguồn độc lập tại [`PA04.04_demo.py`](MA_MAU/PA04.04_demo.py). `assert` trong ví dụ dùng làm phép thử minh họa, không thay thế test suite đầy đủ.
+
+**Cách tự học với ví dụ:** Che phần assertion cuối, dự đoán kết quả theo cơ chế phần 3; sau đó chạy và so sánh. Thử thay một input hợp lệ và một input vi phạm contract.
+
+## 5. Trường hợp biên và lỗi thường gặp
+
+Không pin interpreter phiên bản khác mà gọi hỗ trợ 3.15 khi chưa test.
+
+**Bảng kiểm tự thực hiện:**
+
+| Tình huống | Cần kiểm tra |
+|---|---|
+| Đầu vào thường | Hành vi đúng hợp đồng; không phát sinh side effect không dự kiến |
+| Đầu vào rỗng/giá trị biên | Cách trả kết quả, lỗi và fallback có được mô tả? |
+| Đầu vào sai/ngoài miền | Có từ chối rõ ràng, không gây mất dữ liệu hay lộ thông tin? |
+
+## 6. Bài tập tự làm
+
+**Bài A — Phân tích:** Tự giải thích kết quả của đoạn mã ở phần 4, nêu rõ ít nhất hai bước thực thi và kiểm tra trường hợp biên.
+
+**Bài B — Ứng dụng:** Tạo release checklist 3.15 + fallback 3.14 nếu dependency chưa hỗ trợ.
+
+**Bài C — Phản biện:** Thử một giải pháp thay thế, so sánh về tính đúng, chi phí bảo trì/hiệu năng và độ an toàn trong tình huống có input không tin cậy.
+
+**Bài D — Kiểm thử:** Viết tối thiểu ba ca thử, trong đó có một ca sai đầu vào; lưu thành `test_PA04_04.py`. Không viết `except: pass` để che lỗi.
+
+## 7. Hướng dẫn giải và tiêu chí đạt
+
+[Mở hướng dẫn / lời giải mẫu](LOI_GIAI/PA04.04_loi_giai.md). **Tình trạng:** mẫu tham khảo; lời giải bài vận dụng chưa được kiểm định.
+
+Chỉ tự công nhận đạt khi: (1) giải thích đúng khái niệm và giới hạn; (2) dự đoán đúng ví dụ trước khi chạy; (3) bài B chạy với ít nhất ba ca thử có assertions cụ thể; (4) có thể giải thích vì sao chọn cách làm này thay cho giải pháp khác.
+
+## 8. Tài liệu kiểm chứng
+
+- S01: Python Crash Course (nguồn người dùng cung cấp; tra trong thư mục tài liệu gốc)
+- [R04: Python Standard Library 3.15](https://docs.python.org/3.15/library/)
+- [R11: Python Packaging User Guide](https://packaging.python.org/en/latest/)
+- [R20: uv Documentation](https://docs.astral.sh/uv/)
+
+**Ghi chú:** Nguồn dùng để đối chiếu khái niệm và các mốc phiên bản, không hàm ý toàn bộ ví dụ trong bài có trong tài liệu gốc. Nếu có tính năng phụ thuộc phiên bản hoặc thư viện ngoài, phải chạy lại trên môi trường thực tế trước khi nâng trạng thái xuất bản.
+
+
+## Bổ sung lời giải B độc lập — v2.8
+
+- [PA04.02 — lời giải](LOI_GIAI/PA04.02_loi_giai.md)
+- [PA04.03 — lời giải](LOI_GIAI/PA04.03_loi_giai.md)
+- [PA04.04 — lời giải](LOI_GIAI/PA04.04_loi_giai.md)
+
+Các lời giải chương trình và thiết kế có trạng thái nghiệm thu khác nhau; xem báo cáo v2.8.

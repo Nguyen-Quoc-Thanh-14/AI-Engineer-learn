@@ -1,0 +1,670 @@
+{
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "cases": [
+    {
+      "id": "F04.01",
+      "status": "PASS",
+      "secs": 1.276,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "F04.03",
+      "status": "PASS",
+      "secs": 1.303,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "F05.01",
+      "status": "PASS",
+      "secs": 3.888,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "F05.04",
+      "status": "PASS",
+      "secs": 1.278,
+      "error": "",
+      "out": "current runtime (3, 13, 5)\n"
+    },
+    {
+      "id": "G03.03",
+      "status": "PASS",
+      "secs": 1.437,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "G05.01",
+      "status": "PASS",
+      "secs": 1.175,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "G05.02",
+      "status": "PASS",
+      "secs": 1.153,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "G05.04",
+      "status": "PASS",
+      "secs": 1.111,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "H03.02",
+      "status": "PASS",
+      "secs": 1.163,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "H04.03",
+      "status": "PASS",
+      "secs": 1.168,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "I03.03",
+      "status": "PASS",
+      "secs": 1.355,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "I06.02",
+      "status": "PASS",
+      "secs": 1.152,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "I07.01",
+      "status": "PASS",
+      "secs": 1.148,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "I07.04",
+      "status": "PASS",
+      "secs": 1.144,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "J03.03",
+      "status": "PASS",
+      "secs": 1.18,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "J04.01",
+      "status": "PASS",
+      "secs": 1.411,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "J04.02",
+      "status": "PASS",
+      "secs": 1.008,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "J04.03",
+      "status": "PASS",
+      "secs": 1.4,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "J05.01",
+      "status": "PASS",
+      "secs": 1.243,
+      "error": "",
+      "out": "fixed pycache invalidation; rerun PASS"
+    },
+    {
+      "id": "J05.03",
+      "status": "PASS",
+      "secs": 1.11,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "J06.01",
+      "status": "PASS",
+      "secs": 1.011,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "J06.02",
+      "status": "PASS",
+      "secs": 1.544,
+      "error": "",
+      "out": "CPython 3.13.5\nGIL enabled? True\n"
+    },
+    {
+      "id": "J07.02",
+      "status": "PASS",
+      "secs": 1.346,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "K01.03",
+      "status": "PASS",
+      "secs": 1.165,
+      "error": "",
+      "out": "median per execution 9.815000225898984e-07 8.317475000012564e-07\n"
+    },
+    {
+      "id": "K02.02",
+      "status": "PASS",
+      "secs": 1.267,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "K02.03",
+      "status": "PASS",
+      "secs": 1.158,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "K03.03",
+      "status": "PASS",
+      "secs": 1.245,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "K04.01",
+      "status": "PASS",
+      "secs": 1.407,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "K04.03",
+      "status": "PASS",
+      "secs": 1.068,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "K05.03",
+      "status": "PASS",
+      "secs": 1.213,
+      "error": "",
+      "out": "median wall/cpu seconds (0.006196876999979395, 0.006199575999999984)\n"
+    },
+    {
+      "id": "K05.04",
+      "status": "PASS",
+      "secs": 1.167,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "L05.01",
+      "status": "PASS",
+      "secs": 1.235,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "L05.03",
+      "status": "PASS",
+      "secs": 1.136,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "L06.04",
+      "status": "PASS",
+      "secs": 1.192,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "M01.02",
+      "status": "PASS",
+      "secs": 1.169,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "M02.01",
+      "status": "PASS",
+      "secs": 1.286,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "M05.01",
+      "status": "PASS",
+      "secs": 1.176,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "M07.01",
+      "status": "PASS",
+      "secs": 1.151,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "N02.01",
+      "status": "PASS",
+      "secs": 1.112,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "N03.03",
+      "status": "PASS",
+      "secs": 1.1,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "O03.01",
+      "status": "PASS",
+      "secs": 1.108,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PA01.02",
+      "status": "PASS",
+      "secs": 1.049,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PA01.03",
+      "status": "PASS",
+      "secs": 1.24,
+      "error": "usage: PA01.03_bai_B_solution.py [-h] --input INPUT [--dry-run]\nPA01.03_bai_B_solution.py: error: the following arguments are required: --input\n",
+      "out": ""
+    },
+    {
+      "id": "PA02.01",
+      "status": "PASS",
+      "secs": 1.097,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PA02.03",
+      "status": "PASS",
+      "secs": 1.677,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PA03.01",
+      "status": "PASS",
+      "secs": 1.204,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PA03.02",
+      "status": "PASS",
+      "secs": 1.492,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PA04.02",
+      "status": "PASS",
+      "secs": 1.417,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PA04.03",
+      "status": "PASS",
+      "secs": 1.269,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PD01.03",
+      "status": "PASS",
+      "secs": 1.642,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PD02.03",
+      "status": "PASS",
+      "secs": 2.876,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PD03.01",
+      "status": "PASS",
+      "secs": 1.249,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PD03.02",
+      "status": "PASS",
+      "secs": 1.249,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PD03.03",
+      "status": "PASS",
+      "secs": 1.232,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PD04.03",
+      "status": "PASS",
+      "secs": 1.207,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PD05.02",
+      "status": "PASS",
+      "secs": 1.428,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PE02.02",
+      "status": "PASS",
+      "secs": 1.223,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PE02.03",
+      "status": "PASS",
+      "secs": 1.233,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PE02.04",
+      "status": "PASS",
+      "secs": 1.561,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PL01.02",
+      "status": "PASS",
+      "secs": 1.1,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PL02.01",
+      "status": "PASS",
+      "secs": 3.229,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PL02.02",
+      "status": "PASS",
+      "secs": 3.11,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PL03.02",
+      "status": "PASS",
+      "secs": 1.07,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PL04.01",
+      "status": "PASS",
+      "secs": 3.326,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PL04.03",
+      "status": "PASS",
+      "secs": 3.272,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PL05.01",
+      "status": "PASS",
+      "secs": 2.036,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PL05.03",
+      "status": "PASS",
+      "secs": 4.789,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PM02.02",
+      "status": "PASS",
+      "secs": 2.744,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PM02.03",
+      "status": "PASS",
+      "secs": 1.511,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PM03.01",
+      "status": "PASS",
+      "secs": 2.475,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PM04.02",
+      "status": "PASS",
+      "secs": 0.715,
+      "error": "",
+      "out": "{\"data_sha256\": \"81801ff05409c3cddb57bffa4a85667306fa92cd48a8437a9aa937f750a7d7c6\", \"numpy\": \"2.3.5\", \"python\": \"3.13.5\", \"seed\": 42, \"sklearn\": \"1.8.0\"}\n"
+    },
+    {
+      "id": "PM05.01",
+      "status": "PASS",
+      "secs": 1.031,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PM05.02",
+      "status": "PASS",
+      "secs": 2.135,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PN01.03",
+      "status": "PASS",
+      "secs": 2.239,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PR01.04",
+      "status": "PASS",
+      "secs": 1.561,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PR03.02",
+      "status": "PASS",
+      "secs": 1.511,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PS02.02",
+      "status": "PASS",
+      "secs": 1.174,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PS03.02",
+      "status": "PASS",
+      "secs": 1.284,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PS03.03",
+      "status": "PASS",
+      "secs": 1.219,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PS04.01",
+      "status": "PASS",
+      "secs": 1.078,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PS04.02",
+      "status": "PASS",
+      "secs": 1.22,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PS04.03",
+      "status": "PASS",
+      "secs": 1.565,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PT01.03",
+      "status": "PASS",
+      "secs": 1.214,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PT02.03",
+      "status": "PASS",
+      "secs": 1.168,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PT03.02",
+      "status": "PASS",
+      "secs": 1.032,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PT04.01",
+      "status": "PASS",
+      "secs": 1.047,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PT04.02",
+      "status": "PASS",
+      "secs": 1.085,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PT04.03",
+      "status": "PASS",
+      "secs": 1.14,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PT04.04",
+      "status": "PASS",
+      "secs": 1.047,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PV02.01",
+      "status": "PASS",
+      "secs": 1.45,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PV04.02",
+      "status": "PASS",
+      "secs": 1.103,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PW02.01",
+      "status": "PASS",
+      "secs": 1.272,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PW03.02",
+      "status": "PASS",
+      "secs": 1.057,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PW04.01",
+      "status": "PASS",
+      "secs": 1.143,
+      "error": "",
+      "out": ""
+    },
+    {
+      "id": "PW04.02",
+      "status": "PASS",
+      "secs": 1.172,
+      "error": "",
+      "out": ""
+    }
+  ]
+}

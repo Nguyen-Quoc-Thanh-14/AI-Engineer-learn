@@ -1,0 +1,40 @@
+{
+  "audit_date": "2026-11-04",
+  "input_version": "v2.8",
+  "new_artifact_version": "v2.9-validation-pack",
+  "runtime_tested": "CPython 3.13.5 only",
+  "runtime_target": "CPython 3.15.2",
+  "runtime_target_executed": false,
+  "target_install_attempts": {
+    "uv": "no cpython-3.15.2 linux-x86_64-gnu distribution",
+    "curl": "DNS lookup failed",
+    "container_download": "download failed"
+  },
+  "executed_demo_count": 441,
+  "executed_solution_count": 95,
+  "total_cases": 536,
+  "baseline_initial_counts": {
+    "PASS_EXIT_0": 529,
+    "EXPECTED_ERROR": 1,
+    "REQUIRES_PYTHON_315": 4,
+    "TIMEOUT": 2
+  },
+  "baseline_reconciled_counts": {
+    "PASS_EXIT_0": 529,
+    "EXPECTED_ERROR": 1,
+    "REQUIRES_PYTHON_315": 4,
+    "PASS_EXIT_0_AFTER_RETRY": 2
+  },
+  "output_oracles_passed": 17,
+  "output_oracles_total": 17,
+  "demos_with_explicit_ast_assert": 373,
+  "demos_without_assert_on_py313": 66,
+  "python315_package_wheels_published_for": [
+    "numpy 2.5.4",
+    "pandas 3.1.0",
+    "scikit-learn 1.9.1",
+    "torch 2.15.0",
+    "pyarrow 26.0.0"
+  ],
+  "claim_limit": "Published cp315 wheels demonstrate potential installability for supported platforms, not end-to-end runtime compatibility."
+}

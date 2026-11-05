@@ -1,0 +1,80 @@
+name: Keras 3 PyTorch runtime CPython 3.15.2 (h5py evidence)
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - 'tests/keras_torch_runtime_3152.py'
+      - '03_HOC_PHAN/PL/PL05/**'
+      - '.github/workflows/keras-torch-3152.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  keras-runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      KERAS_BACKEND: torch
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Capture runtime and HDF5 build prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/keras3152 wheelhouse
+          python -VV | tee evidence/keras3152/python_version.txt
+          python -m pip --version | tee evidence/keras3152/pip_version.txt
+          sudo apt-get update
+          sudo apt-get install -y libhdf5-dev pkg-config build-essential
+          pkg-config --modversion hdf5 | tee evidence/keras3152/hdf5_system_version.txt
+      - name: Resolve wheel for exact Python 3.15 Linux x64, or reproducibly build from source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip setuptools wheel
+          if python -m pip download --only-binary=:all: --dest wheelhouse h5py==3.16.0 > evidence/keras3152/binary_probe.log 2>&1; then
+            echo 'PYPI_BINARY_WHEEL' | tee evidence/keras3152/h5py_provenance.txt
+          else
+            echo 'SOURCE_BUILD_H5PY_3_16_0' | tee evidence/keras3152/h5py_provenance.txt
+            python -m pip wheel -v --no-binary=h5py --wheel-dir wheelhouse h5py==3.16.0 2>&1 | tee evidence/keras3152/h5py_build.log
+          fi
+          ls -lah wheelhouse/ | tee evidence/keras3152/wheel_list.txt
+          sha256sum wheelhouse/h5py-*.whl | tee evidence/keras3152/h5py_wheel_sha256.txt
+          python - <<'PY'
+          from pathlib import Path
+          from packaging.utils import parse_wheel_filename
+          from packaging.tags import sys_tags
+          from packaging.version import Version
+          wheels=list(Path("wheelhouse").glob("h5py-*.whl"))
+          assert len(wheels)==1, wheels
+          name,version,build,tags=parse_wheel_filename(wheels[0].name)
+          assert str(name)=="h5py" and version==Version("3.16.0")
+          matches=tags & set(sys_tags())
+          assert matches, f"Wheel {wheels[0]} doesn't match this CPython 3.15.2 Linux x86_64"
+          assert any(tag.interpreter=="cp315" and "x86_64" in tag.platform for tag in matches), matches
+          print("COMPATIBLE_WHEEL", wheels[0], sorted(str(t) for t in matches)[:3])
+          PY
+      - name: Install Keras and all dependencies normally; enforce pip check
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install keras==3.15.1 torch==2.15.0 numpy==2.5.4 wheelhouse/h5py-*.whl 2>&1 | tee evidence/keras3152/pip_install.log
+          python -m pip check 2>&1 | tee evidence/keras3152/pip_check.log
+          python -m pip freeze --all | tee evidence/keras3152/pip_freeze.txt
+      - name: Run deterministic Keras PyTorch + h5py training, inference and gradients
+        run: python tests/keras_torch_runtime_3152.py
+      - name: Upload logs, versions, SHA256 and runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: keras-h5py-cpython3152-evidence
+          path: evidence/keras3152/
+          if-no-files-found: warn

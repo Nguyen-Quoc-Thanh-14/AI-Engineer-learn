@@ -1,0 +1,21 @@
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import json
+
+def rename_batch(root,changes,dry_run=True):
+    moves=[]
+    for old,new in changes:
+        src=(root/old).resolve();dst=(root/new).resolve()
+        if not src.is_relative_to(root.resolve()) or not dst.is_relative_to(root.resolve()):raise ValueError('escape')
+        if not src.is_file() or dst.exists():raise FileExistsError(f'{old}->{new}')
+        moves.append((src,dst))
+    if not dry_run:
+        for src,dst in moves:src.rename(dst)
+    return [(s.name,t.name) for s,t in moves]
+with TemporaryDirectory() as td:
+    root=Path(td);(root/'a.txt').write_text('v',encoding='utf-8')
+    log=rename_batch(root,[('a.txt','b.txt')],dry_run=True)
+    assert (root/'a.txt').exists() and log==[('a.txt','b.txt')]
+    rename_batch(root,[('a.txt','b.txt')],dry_run=False)
+    assert (root/'b.txt').read_text()=='v'
+# For production, journal each move and prepare recovery on partial failures.

@@ -1,0 +1,22 @@
+name: Independent academic review evidence gate (manual human review required)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-human-review-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Verify checksum-tied academic review signoffs for 441 lessons
+        run: python tests/independent_review_gate.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: academic-review-manifest-only-not-final-certificate
+          path: evidence/independent_review_gate.json
+          if-no-files-found: warn

@@ -1,0 +1,54 @@
+name: CPython 3.15.2 source-bound semantic contracts
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - 'tests/semantic_contracts_3152.py'
+      - 'tests/highrisk_contracts_3152.py'
+      - 'tests/security_pedagogy_lint_3152.py'
+      - '03_HOC_PHAN/N/N01/**'
+      - '03_HOC_PHAN/N/N03/**'
+      - 'tests/fault_policy_n0301_3152.py'
+      - '03_HOC_PHAN/**/MA_MAU/*_bai_tap_da_giai_v25.py'
+      - 'tests/application_contracts_batch_3152.py'
+      - 'tests/application_contracts_batch2_3152.py'
+      - '.github/workflows/semantic-contracts-3152.yml'
+      # Re-evaluate all technical evidence whenever the release-gate contract changes.
+      - '.github/workflows/release-readiness-3152.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  targeted-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - run: python -m pip install scikit-learn==1.9.1
+      - name: Verify 17 output oracles and 5 source-bound adversarial groups
+        run: python tests/semantic_contracts_3152.py
+      - name: Verify threat-model lesson N01.02 does not frame attacks as recommended techniques
+        run: python -m unittest discover -s tests -p 'security_pedagogy_lint_3152.py' -v
+      - name: Verify N03.01 outage decision table against independent functional tests
+        run: python tests/fault_policy_n0301_3152.py
+      - name: Verify corrected N01.01 exercise against adversarial cases
+        run: python tests/highrisk_contracts_3152.py
+      - name: Validate 7 corrected application answers against independent functional oracles
+        run: python tests/application_contracts_batch_3152.py
+      - name: Verify five corrected B answers using independent source-bound oracles
+        run: python tests/application_contracts_batch2_3152.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpython-3152-semantic-contracts
+          path: |
+            evidence/semantic_contracts_3152.json
+            evidence/highrisk_application_contracts.json
+            evidence/fault_policy_n0301_3152.json
+            evidence/application_contracts_batch_3152.json
+            evidence/application_contracts_batch2_3152.json
+          if-no-files-found: warn

@@ -1,0 +1,11 @@
+{
+  "source_zip": "GIAO_TRINH_PYTHON_v3_1_CHUAN_BI_NGHIEM_THU_3152.zip",
+  "total_source_files": 1920,
+  "lessons": 441,
+  "demos": 441,
+  "solutions": 95,
+  "static_without_assert_in_lesson": 66,
+  "static_heuristic_only": true,
+  "target_runtime": "3.15.2",
+  "passed_on_target": "NOT_EXECUTED_IN_THIS_PACKAGE"
+}

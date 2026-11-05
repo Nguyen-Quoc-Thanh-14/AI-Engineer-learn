@@ -1,0 +1,59 @@
+name: Course release readiness - blocks without GPU and expert reviews
+# Sync same-SHA technical checks when GPU hardware eligibility evidence changes.
+# Evidence synchronization checkpoint: changing this workflow triggers CPU, semantic,
+# structural and native workflow paths on the same commit.
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - 'tests/release_readiness_3152.py'
+      - 'tests/independent_review_gate.py'
+      - 'tests/gpu_cuda_3152.py'
+      - 'tests/test_evidence_gates.py'
+      - '.github/workflows/gpu-self-hosted-3152.yml'
+      - '.github/workflows/release-readiness-3152.yml'
+      - 'docs/review/INDEPENDENT_REVIEW_SIGNOFFS.csv'
+      - '.github/workflows/full-course-3152.yml'
+      - '.github/workflows/semantic-contracts-3152.yml'
+      - '.github/workflows/curriculum-quality-audit.yml'
+      - '.github/workflows/course-native-pr02-3152.yml'
+      - 'docs/audit/RELEASE_READINESS_3152.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+jobs:
+  contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Adversarial evidence contracts (synthetic fixtures, no GPU certification)
+        run: python -m unittest discover -s tests -p 'test_evidence_gates.py' -v
+  verify:
+    needs: contract-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Require exact SHA provenance, actual GPU artifact, review record
+        run: python tests/release_readiness_3152.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-readiness-not-a-certificate
+          path: |
+            evidence/release_readiness_3152.json
+            evidence/independent_review_gate.json
+          if-no-files-found: warn
+
