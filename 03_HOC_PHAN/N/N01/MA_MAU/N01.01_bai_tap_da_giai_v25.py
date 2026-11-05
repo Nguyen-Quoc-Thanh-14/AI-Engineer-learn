@@ -1,29 +1,43 @@
 # -*- coding: utf-8 -*-
-# Bài tập được giải riêng — Python v2.5
-import re
+"""N01.01: score schema 0..10 with non-finite and wrong-type rejection.
+This is the corrected answer to the exercise; filename retained for existing links.
+"""
+import math
 
-def parse_age(value: str) -> int:
-    if not isinstance(value, str):
-        raise TypeError('age phải là chuỗi')
-    value = value.strip()
-    if not re.fullmatch(r'[0-9]{1,3}', value, flags=re.ASCII):
-        raise ValueError('chỉ nhận số nguyên ASCII có 1–3 chữ số')
-    age = int(value)
-    if age > 130:
-        raise ValueError('age ngoài miền [0,130]')
-    return age
 
-def check():
-    assert parse_age(' 25 ') == 25
-    assert parse_age('0') == 0 and parse_age('130') == 130
-    for value in ('131', '12; DROP TABLE users', '-1', ''):
-        try: parse_age(value)
-        except ValueError: pass
-        else: raise AssertionError('phải từ chối '+value)
-    try: parse_age(True)
-    except TypeError: pass
-    else: raise AssertionError('bool không phải str')
+def parse_score(value: object) -> float:
+    """Accept only builtin int/float between 0 and 10; reject bool, NaN, infinities.
 
-if __name__ == '__main__':
+    This contract intentionally DOES NOT coerce strings or Decimal.
+    """
+    if type(value) not in (int, float):
+        raise TypeError("Điểm phải là int hoặc float; không nhận bool/chuỗi")
+    if not 0 <= value <= 10:
+        raise ValueError("Điểm phải nằm trong [0, 10] và không là NaN")
+    if type(value) is float and not math.isfinite(value):
+        raise ValueError("Điểm phải hữu hạn")
+    return float(value)
+
+
+def check() -> None:
+    for raw, expected in [(0, 0.0), (10, 10.0), (7.5, 7.5), (-0.0, 0.0)]:
+        assert parse_score(raw) == expected
+    for raw in (float("nan"), float("inf"), -float("inf"), -0.01, 10.00001, 10**500):
+        try:
+            parse_score(raw)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"Phải từ chối giá trị ngoài miền: {raw!r}")
+    for raw in (True, False, "7", None, [], {"score": 7}):
+        try:
+            parse_score(raw)
+        except TypeError:
+            pass
+        else:
+            raise AssertionError(f"Phải từ chối kiểu không hợp lệ: {raw!r}")
+
+
+if __name__ == "__main__":
     check()
-    print('OK N01.01')
+    print("PASS N01.01 score validation")
