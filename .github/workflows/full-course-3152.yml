@@ -15,7 +15,7 @@ permissions:
   contents: read
 jobs:
   full-regular:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 95
     env:
       KERAS_BACKEND: torch
@@ -51,6 +51,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libhdf5-dev pkg-config build-essential
           pkg-config --modversion hdf5 | tee evidence/keras3152/hdf5_system_version.txt
+          python -m pip install packaging==25.0
           python -m pip wheel -v --no-binary=h5py --wheel-dir wheelhouse h5py==3.16.0 2>&1 | tee evidence/keras3152/h5py_build.log
           sha256sum wheelhouse/h5py-*.whl | tee evidence/keras3152/h5py_wheel_sha256.txt
           python - <<'PY'

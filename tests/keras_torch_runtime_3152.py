@@ -85,6 +85,9 @@ def run():
     assert len(wheel_lines) == 1, wheel_lines
     wheel_sha256 = wheel_lines[0].split()[0]
     assert len(wheel_sha256) == 64 and all(c in "0123456789abcdef" for c in wheel_sha256)
+    wheel_file = BASE / wheel_lines[0].split(maxsplit=1)[1].strip()
+    assert wheel_file.is_file(), wheel_file
+    assert digest(wheel_file) == wheel_sha256, "Wheel content hash mismatch"
     return {
         "status": "KERAS_RUNTIME_PASS",
         "h5py_wheel_sha256": wheel_sha256,
