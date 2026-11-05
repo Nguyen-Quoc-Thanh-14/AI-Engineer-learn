@@ -1,20 +1,28 @@
-# -*- coding: utf-8 -*-
-# Bài tập được giải riêng — Python v2.5
+"""PT03.01 corrected: analytic gradient of f(x,y)=x^2+3xy vs finite difference."""
 import math
 
-def central_difference(f, x: float, step: float = 1e-5) -> float:
-    if not (step > 0 and math.isfinite(step)):
-        raise ValueError('step phải dương và hữu hạn')
-    return (f(x+step)-f(x-step))/(2*step)
+def f(x:float,y:float)->float:
+    return x*x + 3*x*y
+
+def analytic_gradient(x:float,y:float)->tuple[float,float]:
+    return 2*x + 3*y, 3*x
+
+def finite_gradient(x:float,y:float,h:float=1e-5)->tuple[float,float]:
+    if not math.isfinite(h) or h<=0:raise ValueError("positive finite step required")
+    return ((f(x+h,y)-f(x-h,y))/(2*h),
+            (f(x,y+h)-f(x,y-h))/(2*h))
 
 def check():
-    for x in (-2.0, 0.0, 3.0):
-        assert math.isclose(central_difference(lambda v: v*v, x), 2*x, abs_tol=1e-9)
-    try: central_difference(lambda x: x*x, 1.0, 0)
-    except ValueError: pass
-    else: raise AssertionError('step 0')
-    assert math.isclose(central_difference(lambda x: (x+2)**2, 1), 6.0, abs_tol=1e-9)
-
-if __name__ == '__main__':
+    for x,y in [(0.,0.),(1.,2.),(-3.,4.),(100.,-2.)]:
+        exact=analytic_gradient(x,y)
+        approx=finite_gradient(x,y)
+        assert all(math.isclose(a,b,rel_tol=1e-8,abs_tol=1e-7)
+                   for a,b in zip(exact,approx)),(x,y,exact,approx)
+    assert analytic_gradient(2.,3.)==(13.,6.)
+    for h in (0,-1,float("nan")):
+        try:finite_gradient(1.,2.,h)
+        except ValueError:pass
+        else:raise AssertionError("bad step")
+if __name__=="__main__":
     check()
-    print('OK PT03.01')
+    print("PASS PT03.01 analytic vs finite gradient")

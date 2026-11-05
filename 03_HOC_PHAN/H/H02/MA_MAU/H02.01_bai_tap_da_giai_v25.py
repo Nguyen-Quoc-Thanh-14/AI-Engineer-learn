@@ -1,39 +1,32 @@
-# -*- coding: utf-8 -*-
-# Bài tập được giải riêng — Python v2.5
+"""H02.01 corrected: unittest for stock deduction (ordinary, zero, negative)."""
 import unittest
 
-def normalize_username(name: str) -> str:
-    if not isinstance(name, str):
-        raise TypeError('name phải là str')
-    result = name.strip().lower()
-    if not result:
-        raise ValueError('không được trống')
-    return result
+def deduct_stock(available: int, quantity: int) -> int:
+    if type(available) is not int or type(quantity) is not int:
+        raise TypeError("stock and quantity must be int, not bool")
+    if available < 0 or quantity < 0:
+        raise ValueError("stock and quantity must be nonnegative")
+    if quantity > available:
+        raise ValueError("insufficient stock")
+    return available - quantity
 
-class UsernameTests(unittest.TestCase):
-    def test_regular(self):
-        # Arrange
-        raw = '  Alice  '
-        # Act
-        result = normalize_username(raw)
-        # Assert
-        self.assertEqual(result, 'alice')
-
-    def test_boundary(self):
-        self.assertEqual(normalize_username(' A '), 'a')
-
-    def test_invalid(self):
-        with self.assertRaises(ValueError):
-            normalize_username('   ')
-        with self.assertRaises(TypeError):
-            normalize_username(None)
+class InventoryTests(unittest.TestCase):
+    def test_normal_purchase(self):
+        self.assertEqual(deduct_stock(10, 3), 7)
+    def test_zero_quantity(self):
+        self.assertEqual(deduct_stock(10, 0), 10)
+    def test_negative_quantity(self):
+        with self.assertRaises(ValueError):deduct_stock(10, -1)
+    def test_insufficient_stock(self):
+        with self.assertRaises(ValueError):deduct_stock(3, 4)
+    def test_boolean_quantity(self):
+        with self.assertRaises(TypeError):deduct_stock(4, True)
 
 def check():
-    suite = unittest.defaultTestLoader.loadTestsFromTestCase(UsernameTests)
-    result = unittest.TestResult()
+    suite=unittest.defaultTestLoader.loadTestsFromTestCase(InventoryTests)
+    result=unittest.TestResult()
     suite.run(result)
-    assert result.wasSuccessful() and result.testsRun == 3
-
-if __name__ == '__main__':
+    assert result.wasSuccessful() and result.testsRun==5, result.errors
+if __name__=="__main__":
     check()
-    print('OK H02.01')
+    print("PASS H02.01 inventory unittest")
