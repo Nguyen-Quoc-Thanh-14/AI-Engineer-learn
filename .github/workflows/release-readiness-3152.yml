@@ -1,0 +1,35 @@
+name: Course release readiness - blocks without GPU and expert reviews
+on:
+  push:
+    branches:
+      - audit/full-course-536
+    paths:
+      - 'tests/release_readiness_3152.py'
+      - '.github/workflows/release-readiness-3152.yml'
+      - 'docs/review/INDEPENDENT_REVIEW_SIGNOFFS.csv'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Require exact SHA provenance, actual GPU artifact, review record
+        run: python tests/release_readiness_3152.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-readiness-not-a-certificate
+          path: |
+            evidence/release_readiness_3152.json
+            evidence/independent_review_gate.json
+          if-no-files-found: warn
