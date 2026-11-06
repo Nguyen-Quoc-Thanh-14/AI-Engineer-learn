@@ -10,6 +10,8 @@ on:
       - 'tests/security_pedagogy_lint_3152.py'
       - 'tests/test_issue9_security_contracts.py'
       - 'tests/test_issue9_orm_contracts.py'
+      - 'tests/test_issue9_python315_features.py'
+      - '03_HOC_PHAN/J/J07/**'
       - '03_HOC_PHAN/M/M05/**'
       - '03_HOC_PHAN/PW/PW02/**'
       - '31_HOAN_THIEN_LOI_GIAI_V28/M05.01_bai_B_solution.py'
@@ -46,6 +48,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'security_pedagogy_lint_3152.py' -v
       - name: Verify issue9 security B solution edge cases N02 and F04
         run: python -m unittest discover -s tests -p 'test_issue9_security_contracts.py' -v
+      - name: Verify J07.01 new 3.15 language features
+        run: python -m unittest discover -s tests -p 'test_issue9_python315_features.py' -v
       - name: Verify SQLAlchemy ORM and SQLite FK schema migration B requirements
         run: python -m unittest discover -s tests -p 'test_issue9_orm_contracts.py' -v
       - name: Verify N03.01 outage decision table against independent functional tests
