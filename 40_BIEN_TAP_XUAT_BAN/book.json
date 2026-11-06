@@ -1,10 +1,10 @@
 {
   "title": "Giáo trình Python: từ nền tảng đến chuyên sâu",
-  "edition": "Bản xem trước biên tập 0.9 — 06/11/2026",
+  "edition": "Ấn bản công khai 1.0 — 07/11/2026 (chưa kiểm định độc lập)",
   "language": "vi",
   "audience": "Người bắt đầu học Python, kỹ sư phần mềm và AI",
-  "publisher_status": "Tự xuất bản — đang chuẩn bị",
-  "author_display": "Tên tác giả/ban biên soạn: chủ sở hữu xác nhận trước khi phát hành",
+  "publisher_status": "Tự công bố mã nguồn và bản dựng trên GitHub; chưa có chứng nhận độc lập",
+  "author_display": "Ban biên soạn dự án AI-Engineer-learn (chưa xác minh quyền với mọi thành phần)",
   "volumes": [
     {
       "id": "TAP_01",
@@ -62,5 +62,6 @@
         "PW"
       ]
     }
-  ]
+  ],
+  "publication_notice": "Công bố theo yêu cầu chủ sở hữu; không khẳng định đã nghiệm thu chuyên gia, CUDA, độ chính xác toàn diện hoặc quyền tái sử dụng tài sản bên thứ ba."
 }
