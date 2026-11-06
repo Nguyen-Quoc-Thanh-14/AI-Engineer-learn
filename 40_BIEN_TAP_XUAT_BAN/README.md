@@ -1,6 +1,6 @@
 # Bộ bản thảo xuất bản — Giáo trình Python
 
-**Trạng thái: BẢN XEM TRƯỚC CHỈNH THỂ, chưa phải bản công bố chính thức.**
+**Trạng thái: CÔNG BỐ CÔNG KHAI 1.0 THEO YÊU CẦU CHỦ SỞ HỮU — CHƯA ĐƯỢC KIỂM ĐỊNH ĐỘC LẬP.** Bản GitHub không có tuyên bố bảo đảm tính chính xác toàn diện, bảo đảm quyền tái sử dụng bên thứ ba, hay chứng nhận CUDA/chuyên gia.
 
 Thư mục này tách biệt với 441 bài học ở 03_HOC_PHAN và mã nguồn kiểm toán. Mục tiêu là chỉnh thể cách đọc, mục lục, thứ tự chương, liên kết và trình bày mà KHÔNG thay đổi hợp đồng bài tập, kết quả kiểm thử lịch sử hay mã gốc.
 
@@ -34,7 +34,7 @@ Kết quả đặt ở 40_BIEN_TAP_XUAT_BAN/_build (không commit):
 - manifest.json gồm commit nguồn, số chương/bài, checksum thành phẩm và điều kiện xuất bản còn mở.
 - editorial_warnings.json ghi nhận các liên kết cần rà soát và tiền tố số thứ tự tiêu đề đã đồng nhất.
 
-Workflow GitHub: editorial-publication-preview.yml chỉ tạo artifact xem trước, KHÔNG tạo Release, KHÔNG merge PR và KHÔNG thay thế kiểm định CUDA/native/chuyên gia.
+Workflow GitHub: editorial-publication-preview.yml đóng gói artifact định dạng sách. Tên artifact có thể còn chữ PREVIEW do quy ước kỹ thuật. Không đồng nghĩa với nghiệm thu CUDA/native/chuyên gia và không tự tạo GitHub Release.
 
 ## Quy tắc biên tập an toàn
 
