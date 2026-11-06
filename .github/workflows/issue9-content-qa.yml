@@ -14,6 +14,8 @@ on:
       - 'tests/test_issue9_f0502_lazy_import.py'
       - 'tests/test_issue9_d0601_pep695.py'
       - 'tests/test_issue9_f0203_pyproject.py'
+      - 'tests/test_issue9_pd0503_parquet_roundtrip.py'
+      - 'tests/issue9_d0602_overload_checker.py'
       - 'tests/issue9_flag_decisions.py'
       - 'tests/issue9_candidate_context.py'
       - 'tests/test_issue9_python315_features.py'
@@ -51,8 +53,12 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_issue9_d0601_pep695.py' -v
       - name: Verify F02.03 actual pyproject.toml disk roundtrip
         run: python -m unittest discover -s tests -p 'test_issue9_f0203_pyproject.py' -v
-      - name: Install type checkers for D06.03 compatibility classification
+      - name: Verify PD05.03 actual Parquet nullable/timestamp roundtrip
+        run: python -m unittest discover -s tests -p 'test_issue9_pd0503_parquet_roundtrip.py' -v
+      - name: Install type checkers for D06.02/D06.03 compatibility classification
         run: python -m pip install 'mypy>=2.4,<3' pyright
+      - name: Verify D06.02 overloads with mypy and pyright positive/negative cases
+        run: python tests/issue9_d0602_overload_checker.py
       - name: Verify D06.03 runtime TypedDict extra_items and TypeForm
         run: python -m unittest discover -s tests -p 'test_issue9_typeform_runtime.py' -v
       - name: Observe mypy and pyright D06.03 positive/negative fixture acceptance
