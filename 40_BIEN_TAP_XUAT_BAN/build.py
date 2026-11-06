@@ -182,6 +182,10 @@ def build(root: Path = ROOT, output: Path | None = None, sha: str | None = None)
         if output == ROOT or ROOT in output.parents and not (HERE == output or HERE in output.parents):
             raise ValueError("Build output must be inside publication folder or an external temp directory")
         css = (HERE / "print.css").read_text(encoding="utf-8")
+        preface = (HERE / "LOI_NOI_DAU.md").read_text(encoding="utf-8").splitlines()
+        if not preface or not preface[0].startswith("# "):
+            raise RuntimeError("Invalid editorial preface")
+        preface_body = "\n".join(preface[1:]).strip()
         warnings = []
         source_map = []
         files_meta = {}
@@ -210,6 +214,10 @@ def build(root: Path = ROOT, output: Path | None = None, sha: str | None = None)
                         "",
                         "Các ghi chú phiên bản trong từng bài là dấu vết lịch sử, không phải chứng nhận chất lượng hiện hành.",
                         "Lời giải chỉ dùng để đối chiếu sau khi người học hoàn tất bài.",
+                        "",
+                        "## Lời nói đầu",
+                        "",
+                        preface_body,
                         "",
                         "## Mục lục",
                         "",
@@ -299,6 +307,9 @@ def main():
     parser.add_argument("--output",type=Path,default=HERE/"_build")
     args=parser.parse_args()
     manifest,warnings=build(output=args.output,sha=args.sha)
+    for warning in warnings:
+        if warning["kind"] in ("LINK_TARGET_NOT_FOUND", "LINK_COMPLEX_TARGET", "UNCLOSED_CODE_FENCE"):
+            print("EDITORIAL_WARNING " + json.dumps(warning,ensure_ascii=False),flush=True)
     print(json.dumps({
         "status":manifest["status"],"source_commit":manifest["source_commit"],
         "lessons":manifest["source_lessons"],"chapters":manifest["source_chapters"],

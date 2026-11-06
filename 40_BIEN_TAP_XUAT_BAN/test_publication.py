@@ -59,6 +59,8 @@ class PublicationTests(unittest.TestCase):
                 answer=(destination/(volume["id"]+"_LOI_GIAI.md")).read_text(encoding="utf8")
                 self.assertIn("BẢN XEM TRƯỚC",student)
                 self.assertIn("BẢN XEM TRƯỚC",answer)
+                self.assertIn("## Lời nói đầu",student)
+                self.assertIn("## Lời nói đầu",answer)
                 self.assertEqual(len(re.findall(r'<a id="bai-[A-Z0-9-]+"></a>',student)),volume["lesson_count"])
 
 if __name__=="__main__":
