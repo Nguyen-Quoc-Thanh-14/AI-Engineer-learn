@@ -49,3 +49,10 @@ Chương trình `tests/issue9_content_inventory.py` đọc toàn bộ nguồn b�
 6. 441 phiếu reviewer độc lập/520 lượt thuộc Issue #7, GPU hardware attestation thuộc Issue #8 — vẫn **BLOCKED**.
 
 **Quyết định:** Issue #9 giữ OPEN vì chưa kết thúc triage/nghiệm thu từng bài. Không merge vào `main`, không chuyển Draft PR #4 thành Ready, không tuyên bố giáo trình FULLY_CERTIFIED.
+
+## Bổ sung M05.03 — bắt buộc đo query thật thay vì diễn giải (06/11/2026)
+
+- **Xác minh lỗi phạm vi đáp án:** Bài B yêu cầu *test assert <=2 queries* khi tải orders cho 100 users. Lời giải trước đây chỉ có mô tả chiến lược, không có SQL ORM thực hoặc test tự chạy; demo Python map giả lập không cho phép đếm N+1. Mức phân loại: `CONFIRMED_UNIMPLEMENTED_TEST_CONTRACT`.
+- **Sửa:** thêm `M05.03_bai_B_orm_query_budget.py` dùng SQLAlchemy/SQLite in-memory, 100 users/200 orders; `selectinload` <=2 SELECT, lazy 101 SELECT; counter tách setup/teardown; thêm `tests/test_issue9_m0503_query_budget.py` với 5 ca độc lập, invalid inputs và counter cleanup.
+- **Đối chứng cục bộ:** 5/5 unittest PASS trên Python container (không phải CPython 3.15.2). Kết quả CPython 3.15.2 phải xem từ workflow Issue #9 đúng SHA.
+- **Giới hạn:** counter này chỉ đo SELECT SQLAlchemy trong fixture; không tuyên bố mọi DB đều đạt 2 queries hay đã có review độc lập. Issue #9 còn OPEN.
