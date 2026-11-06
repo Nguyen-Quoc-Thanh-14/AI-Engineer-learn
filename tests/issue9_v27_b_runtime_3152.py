@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Execute historical B (v27) scripts tied to source-flagged lessons, without claiming full semantic review.
+"""Execute historical B v25/v27 on CPython 3.15.2; do not claim full semantic review.
 
 Each B script must exit 0 and emit an exact PASS <lesson_id> marker on CPython 3.15.2.
 A script absent from the repository is explicitly recorded, never marked PASS.
+Older v25 scripts emit an OK marker; v27 scripts emit PASS. Both must exit zero.
 """
 import hashlib
 import json
@@ -20,6 +21,15 @@ OUT = ROOT / "evidence" / "issue9_content_qa" / "historical_B_3152_probe.json"
 def hash_file(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
+def select_script(chapter, lesson_id):
+    """Prefer v27, but older v25 exercises also have runnable, independently versioned scripts."""
+    for version in ("v27", "v25"):
+        candidate = chapter / "MA_MAU" / f"{lesson_id}_bai_tap_da_giai_{version}.py"
+        if candidate.is_file():
+            return candidate, version
+    return None, None
+
+
 def inspect():
     if sys.implementation.name != "cpython" or sys.version_info[:3] != (3, 15, 2):
         raise RuntimeError("Requires CPython 3.15.2")
@@ -27,8 +37,7 @@ def inspect():
     if structural_errors:
         raise RuntimeError("Invalid source inventory: " + str(structural_errors[:5]))
     suspects = [r for r in lesson_rows if (
-        (ROOT / r["lesson_path"]).parent.parent.joinpath(
-            "MA_MAU", r["lesson_id"] + "_bai_tap_da_giai_v27.py").is_file()
+        select_script((ROOT / r["lesson_path"]).parent.parent, r["lesson_id"])[0] is not None
         or "POSSIBLE_STALE_VERSION_CLAIM" in r["candidate_flags"].split(";")
     )]
     outputs = []
@@ -36,8 +45,8 @@ def inspect():
         identifier = row["lesson_id"]
         lesson_path = ROOT / row["lesson_path"]
         chapter = lesson_path.parent.parent
-        script = chapter / "MA_MAU" / (identifier + "_bai_tap_da_giai_v27.py")
-        if not script.exists():
+        script, generation = select_script(chapter, identifier)
+        if script is None:
             outputs.append({"id": identifier, "status": "NO_HISTORICAL_B_SCRIPT",
                             "lesson_sha256": row["lesson_sha256"]})
             continue
@@ -55,9 +64,11 @@ def inspect():
                     cwd=temp, env=env, capture_output=True, text=True,
                     timeout=35, check=False
                 )
-                marker = "PASS " + identifier
+                marker = ("PASS " if generation == "v27" else "OK ") + identifier
+                lines = proc.stdout.splitlines()
+                matched = any(line == marker or line.startswith(marker + " ") for line in lines)
                 status = ("B_SCRIPT_3152_PASS" if proc.returncode == 0
-                          and marker in proc.stdout.splitlines() else "B_SCRIPT_FAILED")
+                          and matched else "B_SCRIPT_FAILED")
                 result = {
                     "id": identifier, "status": status,
                     "exit_code": proc.returncode,
@@ -69,6 +80,7 @@ def inspect():
                 result = {"id": identifier, "status": "B_SCRIPT_TIMEOUT"}
         result["duration_seconds"] = round(time.monotonic() - start, 3)
         result["script"] = script.relative_to(ROOT).as_posix()
+        result["source_generation"] = generation
         result["script_sha256"] = hash_file(script)
         result["lesson_sha256"] = row["lesson_sha256"]
         outputs.append(result)
@@ -82,6 +94,8 @@ def inspect():
         "python_version": ".".join(map(str, sys.version_info[:3])),
         "candidate_count": len(suspects),
         "status_counts": statuses,
+        "source_generations": {v: sum(r.get("source_generation") == v for r in outputs)
+                               for v in ("v25", "v27")},
         "results": outputs,
         "full_expert_review": False,
         "limitations": ("Exec exit 0 + a PASS marker proves a particular script ran to completion, "
@@ -91,7 +105,7 @@ def inspect():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n", encoding="utf8")
     print(json.dumps({k:v for k,v in report.items() if k!="results"},ensure_ascii=False))
-    return 0 if statuses.get("B_SCRIPT_FAILED", 0) == 0 and statuses.get("B_SCRIPT_TIMEOUT", 0) == 0 else 2
+    return 0 if statuses.get("B_SCRIPT_FAILED", 0) == 0 and statuses.get("B_SCRIPT_TIMEOUT", 0) == 0 and statuses.get("NO_HISTORICAL_B_SCRIPT", 0) == 0 else 2
 
 if __name__ == "__main__":
     raise SystemExit(inspect())
