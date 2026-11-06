@@ -11,6 +11,8 @@ on:
       - 'tests/test_issue9_content_inventory.py'
       - 'tests/test_issue9_orm_contracts.py'
       - 'tests/test_issue9_python315_features.py'
+      - 'tests/test_issue9_typeform_runtime.py'
+      - 'tests/issue9_typing_checker_compat.py'
       - '.github/workflows/issue9-content-qa.yml'
   workflow_dispatch:
 permissions:
@@ -30,6 +32,12 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_issue9_security_contracts.py' -v
       - name: Verify actual ORM and versioned FK migration under SQLite
         run: python -m unittest discover -s tests -p 'test_issue9_orm_contracts.py' -v
+      - name: Install type checkers for D06.03 compatibility classification
+        run: python -m pip install 'mypy>=2.4,<3' pyright
+      - name: Verify D06.03 runtime TypedDict extra_items and TypeForm
+        run: python -m unittest discover -s tests -p 'test_issue9_typeform_runtime.py' -v
+      - name: Observe mypy and pyright D06.03 positive/negative fixture acceptance
+        run: python tests/issue9_typing_checker_compat.py
       - name: Verify J07.01 CPython 3.15 lazy, frozendict and sentinel
         run: python -m unittest discover -s tests -p 'test_issue9_python315_features.py' -v
       - name: Verify triage detects real source-integrity failures
