@@ -9,6 +9,7 @@ on:
       - 'tests/issue9_content_inventory.py'
       - 'tests/test_issue9_security_contracts.py'
       - 'tests/test_issue9_content_inventory.py'
+      - 'tests/test_issue9_orm_contracts.py'
       - '.github/workflows/issue9-content-qa.yml'
   workflow_dispatch:
 permissions:
@@ -22,8 +23,12 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.15.2'
+      - name: Install ORM dependency for the 2 actual ORM/migration exercises
+        run: python -m pip install 'sqlalchemy>=2.0,<3'
       - name: Independently verify N02/F04 exercise B semantics
         run: python -m unittest discover -s tests -p 'test_issue9_security_contracts.py' -v
+      - name: Verify actual ORM and versioned FK migration under SQLite
+        run: python -m unittest discover -s tests -p 'test_issue9_orm_contracts.py' -v
       - name: Verify triage detects real source-integrity failures
         run: python -m unittest discover -s tests -p 'test_issue9_content_inventory.py' -v
       - name: Scan all 441 lessons and all 95 standalone B programs
