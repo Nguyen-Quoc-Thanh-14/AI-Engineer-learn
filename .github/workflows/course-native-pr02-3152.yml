@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - audit/full-course-536
+      - audit/issue9-content-qa
     paths:
       - '03_HOC_PHAN/PR/PR02/LAB_NATIVE_ABI3T/**'
       - '.github/workflows/course-native-pr02-3152.yml'

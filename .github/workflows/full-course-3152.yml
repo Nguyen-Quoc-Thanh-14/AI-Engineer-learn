@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - audit/full-course-536
+      - audit/issue9-content-qa
     paths:
       - '03_HOC_PHAN/**'
       - '31_HOAN_THIEN_LOI_GIAI_V28/**'

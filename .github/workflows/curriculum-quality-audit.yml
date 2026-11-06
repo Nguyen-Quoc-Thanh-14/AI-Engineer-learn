@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - audit/full-course-536
+      - audit/issue9-content-qa
     paths:
       - 'tests/curriculum_quality_audit.py'
       - 'tests/gpu_cuda_3152.py'

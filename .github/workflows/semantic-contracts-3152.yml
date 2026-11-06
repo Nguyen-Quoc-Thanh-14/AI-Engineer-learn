@@ -3,10 +3,16 @@ on:
   push:
     branches:
       - audit/full-course-536
+      - audit/issue9-content-qa
     paths:
       - 'tests/semantic_contracts_3152.py'
       - 'tests/highrisk_contracts_3152.py'
       - 'tests/security_pedagogy_lint_3152.py'
+      - 'tests/test_issue9_security_contracts.py'
+      - '03_HOC_PHAN/N/N02/**'
+      - '03_HOC_PHAN/F/F04/**'
+      - '31_HOAN_THIEN_LOI_GIAI_V28/N02.01_bai_B_solution.py'
+      - '31_HOAN_THIEN_LOI_GIAI_V28/F04.01_bai_B_solution.py'
       - '03_HOC_PHAN/N/N01/**'
       - '03_HOC_PHAN/N/N03/**'
       - 'tests/fault_policy_n0301_3152.py'
@@ -33,6 +39,8 @@ jobs:
         run: python tests/semantic_contracts_3152.py
       - name: Verify threat-model lesson N01.02 does not frame attacks as recommended techniques
         run: python -m unittest discover -s tests -p 'security_pedagogy_lint_3152.py' -v
+      - name: Verify issue9 security B solution edge cases N02 and F04
+        run: python -m unittest discover -s tests -p 'test_issue9_security_contracts.py' -v
       - name: Verify N03.01 outage decision table against independent functional tests
         run: python tests/fault_policy_n0301_3152.py
       - name: Verify corrected N01.01 exercise against adversarial cases
