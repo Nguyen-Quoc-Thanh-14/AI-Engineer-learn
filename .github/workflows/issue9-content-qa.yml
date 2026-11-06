@@ -12,6 +12,7 @@ on:
       - 'tests/test_issue9_orm_contracts.py'
       - 'tests/test_issue9_python315_features.py'
       - 'tests/test_issue9_typeform_runtime.py'
+      - 'tests/test_issue9_design_practicals.py'
       - 'tests/issue9_typing_checker_compat.py'
       - '.github/workflows/issue9-content-qa.yml'
   workflow_dispatch:
@@ -28,6 +29,10 @@ jobs:
           python-version: '3.15.2'
       - name: Install ORM dependency for the 2 actual ORM/migration exercises
         run: python -m pip install 'sqlalchemy>=2.0,<3'
+      - name: Install supported Hypothesis and PyArrow to verify runnable B design exercises
+        run: python -m pip install 'hypothesis>=6,<7' 'pyarrow==26.0.0'
+      - name: Verify H06 shrinking, PE02 Parquet schema and PS02 sensor timezone/units
+        run: python -m unittest discover -s tests -p 'test_issue9_design_practicals.py' -v
       - name: Independently verify N02/F04 exercise B semantics
         run: python -m unittest discover -s tests -p 'test_issue9_security_contracts.py' -v
       - name: Verify actual ORM and versioned FK migration under SQLite
