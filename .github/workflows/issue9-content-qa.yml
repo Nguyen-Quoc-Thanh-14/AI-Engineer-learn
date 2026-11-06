@@ -49,6 +49,14 @@ jobs:
       - if: always()
         uses: actions/upload-artifact@v4
         with:
+          name: issue9-full-course-source-snapshot-for-manual-audit
+          path: |
+            03_HOC_PHAN/
+            31_HOAN_THIEN_LOI_GIAI_V28/
+          if-no-files-found: error
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
           name: issue9-441-lessons-95-B-TRIAGE-not-certification
           path: evidence/issue9_content_qa/
           if-no-files-found: warn
