@@ -1,6 +1,12 @@
 name: Optional TensorFlow CPython 3.15.2 wheel availability (not runtime attestation)
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - audit/issue9-content-qa
+    paths:
+      - '.github/workflows/optional-tensorflow-3152.yml'
+      - 'tests/tensorflow_optional_wheel_probe.py'
 permissions:
   contents: read
 jobs:
