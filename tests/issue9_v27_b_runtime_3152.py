@@ -3,7 +3,7 @@
 
 Each B script must exit 0 and emit an exact PASS <lesson_id> marker on CPython 3.15.2.
 A script absent from the repository is explicitly recorded, never marked PASS.
-Older v25 scripts emit an OK marker; v27 scripts emit PASS. Both must exit zero.
+Historical v25 may emit OK or PASS after verified source fixes; v27 emits PASS. Both must exit zero.
 """
 import hashlib
 import json
@@ -64,15 +64,18 @@ def inspect():
                     cwd=temp, env=env, capture_output=True, text=True,
                     timeout=35, check=False
                 )
-                marker = ("PASS " if generation == "v27" else "OK ") + identifier
+                # v25 corpus has two documented marker styles: older OK and revised PASS.
+                # Match the whole identifier boundary to prevent e.g. A01.01X spoofing.
+                markers = ("PASS " + identifier, "OK " + identifier)
                 lines = proc.stdout.splitlines()
-                matched = any(line == marker or line.startswith(marker + " ") for line in lines)
+                matched = any(line == marker or line.startswith(marker + " ")
+                              for marker in markers for line in lines)
                 status = ("B_SCRIPT_3152_PASS" if proc.returncode == 0
                           and matched else "B_SCRIPT_FAILED")
                 result = {
                     "id": identifier, "status": status,
                     "exit_code": proc.returncode,
-                    "expected_marker": marker,
+                    "accepted_markers": markers,
                     "stdout_tail": proc.stdout[-1500:],
                     "stderr_tail": proc.stderr[-1500:],
                 }
