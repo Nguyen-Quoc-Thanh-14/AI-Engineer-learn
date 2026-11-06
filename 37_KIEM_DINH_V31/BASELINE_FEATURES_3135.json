@@ -1,0 +1,63 @@
+{
+  "date_utc": "2026-11-04T14:37:25.522660+00:00",
+  "target_version": "CPython 3.15.2",
+  "interpreter": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "runtime_flags": {
+    "abiflags": "",
+    "Py_GIL_DISABLED": 0,
+    "gil_enabled": true
+  },
+  "target_runtime_executed": false,
+  "mode": "baseline",
+  "group": "features",
+  "status_count": {
+    "SKIP_NEEDS_CPYTHON_3152": 8
+  },
+  "evidence_limit": "PASS checks the designated contract only, not full production safety; baseline is never a CPython 3.15.2 certification",
+  "results": [
+    {
+      "test": "feature_frozendict",
+      "sha256": "c08344e7d554cb594407c9530f29b37f71aa298bf9603016199de383aac03909",
+      "status": "SKIP_NEEDS_CPYTHON_3152"
+    },
+    {
+      "test": "feature_sentinel",
+      "sha256": "974142d9661db3ebb01025cbc2ea99e1a1706c4e9911c25dc587a00858e82178",
+      "status": "SKIP_NEEDS_CPYTHON_3152"
+    },
+    {
+      "test": "feature_unpack_comprehension",
+      "sha256": "5a7d6dd3e95e2a2f11bce087ba5ca41ebc1e1f073773a8f066ee703b8bcd34e5",
+      "status": "SKIP_NEEDS_CPYTHON_3152"
+    },
+    {
+      "test": "feature_lazy_import",
+      "sha256": "b8e6901eb7e90ec7be4e6dafbd672d0b6af41bd62883502954d5be9c52e2b821",
+      "status": "SKIP_NEEDS_CPYTHON_3152"
+    },
+    {
+      "test": "original_C07.02",
+      "expected_output": "3\nTrue\n",
+      "related_semantic_check": "feature_frozendict",
+      "status": "SKIP_NEEDS_CPYTHON_3152"
+    },
+    {
+      "test": "original_C07.03",
+      "expected_output": "False\nTrue\n",
+      "related_semantic_check": "feature_sentinel",
+      "status": "SKIP_NEEDS_CPYTHON_3152"
+    },
+    {
+      "test": "original_C07.04",
+      "expected_output": "[1, 2, 3, 4, 5]\n{'a': 1, 'b': 2}\n",
+      "related_semantic_check": "feature_unpack_comprehension",
+      "status": "SKIP_NEEDS_CPYTHON_3152"
+    },
+    {
+      "test": "original_F05.02",
+      "expected_output": "",
+      "related_semantic_check": "feature_lazy_import",
+      "status": "SKIP_NEEDS_CPYTHON_3152"
+    }
+  ]
+}

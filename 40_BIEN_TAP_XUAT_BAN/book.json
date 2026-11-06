@@ -1,0 +1,67 @@
+{
+  "title": "Giáo trình Python: từ nền tảng đến chuyên sâu",
+  "edition": "Ấn bản công khai 1.0 — 07/11/2026 (chưa kiểm định độc lập)",
+  "language": "vi",
+  "audience": "Người bắt đầu học Python, kỹ sư phần mềm và AI",
+  "publisher_status": "Tự công bố mã nguồn và bản dựng trên GitHub; chưa có chứng nhận độc lập",
+  "author_display": "Ban biên soạn dự án AI-Engineer-learn (chưa xác minh quyền với mọi thành phần)",
+  "volumes": [
+    {
+      "id": "TAP_01",
+      "title": "Nền tảng Python và lập trình có cấu trúc",
+      "parts": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "id": "TAP_02",
+      "title": "Công cụ phát triển, kiểm thử và tư duy lập trình",
+      "parts": [
+        "F",
+        "G",
+        "H",
+        "I",
+        "J"
+      ]
+    },
+    {
+      "id": "TAP_03",
+      "title": "Hiệu năng, đồng thời, hệ thống và bảo mật",
+      "parts": [
+        "K",
+        "L",
+        "M",
+        "N",
+        "O"
+      ]
+    },
+    {
+      "id": "TAP_04",
+      "title": "Ứng dụng, dữ liệu, kỹ thuật dữ liệu và học máy",
+      "parts": [
+        "PA",
+        "PD",
+        "PE",
+        "PL",
+        "PM"
+      ]
+    },
+    {
+      "id": "TAP_05",
+      "title": "AI ứng dụng, tính toán native, khoa học và thị giác máy tính",
+      "parts": [
+        "PN",
+        "PR",
+        "PS",
+        "PT",
+        "PV",
+        "PW"
+      ]
+    }
+  ],
+  "publication_notice": "Công bố theo yêu cầu chủ sở hữu; không khẳng định đã nghiệm thu chuyên gia, CUDA, độ chính xác toàn diện hoặc quyền tái sử dụng tài sản bên thứ ba."
+}

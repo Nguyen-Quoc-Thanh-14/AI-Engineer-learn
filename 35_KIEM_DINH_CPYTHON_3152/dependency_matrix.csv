@@ -1,0 +1,13 @@
+distribution,import,demo_count,python_3135_installed_version,candidate_pypi_version,published_cp315_wheel_evidence,pypi_source,runtime_3152_verified
+numpy,numpy,12,2.3.5,2.5.4,YES,https://pypi.org/project/numpy/,NO
+pandas,pandas,8,2.2.3,3.1.0,YES,https://pypi.org/project/pandas/3.1.0/,NO
+scikit-learn,sklearn,10,1.8.0,1.9.1,YES,https://pypi.org/project/scikit-learn/1.9.1/,NO
+torch,torch,15,2.10.0+cpu,2.15.0,YES,https://pypi.org/project/torch/2.15.0/,NO
+pyarrow,pyarrow,0,NOT_INSTALLED,26.0.0,YES,https://pypi.org/project/pyarrow/26.0.0/,NO
+tensorflow,tensorflow,0,NOT_INSTALLED,NOT_CONFIRMED,UNKNOWN,https://pypi.org/project/tensorflow/,NO
+keras,keras,0,3.13.2,3.15.1,PURE_PYTHON_WHEEL_ONLY,https://pypi.org/project/keras/,NO
+scipy,scipy,3,1.17.0,NOT_REVIEWED,NOT_REVIEWED,https://pypi.org/project/scipy/,NO
+Pillow,PIL,2,12.3.0,NOT_REVIEWED,NOT_REVIEWED,https://pypi.org/project/pillow/,NO
+opencv-python,cv2,2,4.13.0.92,NOT_REVIEWED,NOT_REVIEWED,https://pypi.org/project/opencv-python/,NO
+fastapi,fastapi,3,0.128.2,NOT_REVIEWED,NOT_REVIEWED,https://pypi.org/project/fastapi/,NO
+SQLAlchemy,sqlalchemy,1,2.0.50,NOT_REVIEWED,NOT_REVIEWED,https://pypi.org/project/SQLAlchemy/,NO

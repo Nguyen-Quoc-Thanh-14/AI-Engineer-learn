@@ -1,36 +1,40 @@
-name: CUDA GPU check (requires configured self-hosted GPU runner)
+name: Actual NVIDIA CUDA hardware evidence (self-hosted only)
 on:
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  gpu:
+  gpu-evidence:
     runs-on: [self-hosted, linux, x64, gpu]
     timeout-minutes: 40
+    env:
+      CUDA_VISIBLE_DEVICES: '0'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v6
         with:
           python-version: '3.15.2'
-      - name: Check NVIDIA driver
-        run: nvidia-smi
-      - name: Install pinned PyTorch wheel
-        run: |
-          python -m pip install --only-binary=:all: torch==2.15.0
-      - name: Verify actual CUDA tensor operations
+      - name: Capture NVIDIA hardware and verify driver access
         shell: bash
         run: |
-          python - <<'PY'
-          import json, sys, torch
-          assert sys.version_info[:3] == (3,15,2)
-          assert torch.cuda.is_available(), "GPU CUDA hardware/runtime not present"
-          x = torch.arange(0, 1024, device="cuda", dtype=torch.float32)
-          y = (x * 3).sum()
-          expected = 3 * 1023 * 1024 / 2
-          assert abs(y.item() - expected) < 1.0
-          torch.cuda.synchronize()
-          print(json.dumps({"status":"PASS","torch":torch.__version__,
-              "cuda_runtime":torch.version.cuda,
-              "device":torch.cuda.get_device_name(0),
-              "result":y.item()}))
-          PY
+          set -euo pipefail
+          mkdir -p evidence/cuda_3152
+          python -VV | tee evidence/cuda_3152/python_version.txt
+          nvidia-smi | tee evidence/cuda_3152/nvidia_smi.txt
+      - name: Install pinned PyTorch and require dependency health
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --only-binary=:all: torch==2.15.0
+          python -m pip check | tee evidence/cuda_3152/pip_check.log
+          python -m pip freeze --all | tee evidence/cuda_3152/installed_versions.txt
+      - name: GPU kernels, gradients, CPU/GPU oracle and device training
+        run: python tests/gpu_cuda_3152.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: actual-cuda-cpython3152-evidence
+          path: evidence/cuda_3152/
+          if-no-files-found: warn

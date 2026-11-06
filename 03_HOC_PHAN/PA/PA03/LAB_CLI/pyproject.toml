@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "course-orders-cli-issue9"
+version = "0.1.0"
+description = "Synthetic training CLI; dry-run only"
+requires-python = ">=3.14"
+
+[project.scripts]
+clean-orders = "orders.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,24 @@
+{
+  "date_utc": "2026-11-04T14:37:26.372935+00:00",
+  "target_version": "CPython 3.15.2",
+  "interpreter": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "runtime_flags": {
+    "abiflags": "",
+    "Py_GIL_DISABLED": 0,
+    "gil_enabled": true
+  },
+  "target_runtime_executed": false,
+  "mode": "baseline",
+  "group": "free",
+  "status_count": {
+    "SKIP_NEEDS_CPYTHON_3152_FREE_BUILD": 1
+  },
+  "evidence_limit": "PASS checks the designated contract only, not full production safety; baseline is never a CPython 3.15.2 certification",
+  "results": [
+    {
+      "test": "free_threaded_no_gil",
+      "sha256": "fad25ff0ad939ecdc9c8663be97f372847e096c629b5df4cdbec3d1a4f0a45db",
+      "status": "SKIP_NEEDS_CPYTHON_3152_FREE_BUILD"
+    }
+  ]
+}

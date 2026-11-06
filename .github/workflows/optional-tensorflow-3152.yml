@@ -1,0 +1,28 @@
+name: Optional TensorFlow CPython 3.15.2 wheel availability (not runtime attestation)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - audit/issue9-content-qa
+    paths:
+      - '.github/workflows/optional-tensorflow-3152.yml'
+      - 'tests/tensorflow_optional_wheel_probe.py'
+permissions:
+  contents: read
+jobs:
+  classify-tensorflow-binary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Check binary-only TensorFlow wheel resolution, no installation or runtime claims
+        run: python tests/tensorflow_optional_wheel_probe.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: optional-tensorflow-wheel-availability-not-runtime-proof
+          path: evidence/tensorflow_optional/
+          if-no-files-found: warn

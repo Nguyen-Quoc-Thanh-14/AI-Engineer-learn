@@ -1,0 +1,77 @@
+name: CPython 3.15.2 source-bound semantic contracts
+on:
+  push:
+    branches:
+      - audit/full-course-536
+      - audit/issue9-content-qa
+    paths:
+      - 'tests/semantic_contracts_3152.py'
+      - 'tests/highrisk_contracts_3152.py'
+      - 'tests/security_pedagogy_lint_3152.py'
+      - 'tests/test_issue9_security_contracts.py'
+      - 'tests/test_issue9_orm_contracts.py'
+      - 'tests/test_issue9_python315_features.py'
+      - 'tests/test_issue9_typeform_runtime.py'
+      - '03_HOC_PHAN/D/D06/**'
+      - '03_HOC_PHAN/J/J07/**'
+      - '03_HOC_PHAN/M/M05/**'
+      - '03_HOC_PHAN/PW/PW02/**'
+      - '31_HOAN_THIEN_LOI_GIAI_V28/M05.01_bai_B_solution.py'
+      - '31_HOAN_THIEN_LOI_GIAI_V28/PW02.01_bai_B_solution.py'
+      - '03_HOC_PHAN/N/N02/**'
+      - '03_HOC_PHAN/F/F04/**'
+      - '31_HOAN_THIEN_LOI_GIAI_V28/N02.01_bai_B_solution.py'
+      - '31_HOAN_THIEN_LOI_GIAI_V28/F04.01_bai_B_solution.py'
+      - '03_HOC_PHAN/N/N01/**'
+      - '03_HOC_PHAN/N/N03/**'
+      - 'tests/fault_policy_n0301_3152.py'
+      - '03_HOC_PHAN/**/MA_MAU/*_bai_tap_da_giai_v25.py'
+      - 'tests/application_contracts_batch_3152.py'
+      - 'tests/application_contracts_batch2_3152.py'
+      - '.github/workflows/semantic-contracts-3152.yml'
+      # Re-evaluate all technical evidence whenever the release-gate contract changes.
+      - '.github/workflows/release-readiness-3152.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  targeted-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - run: python -m pip install scikit-learn==1.9.1 'sqlalchemy>=2.0,<3'
+      - name: Verify 17 output oracles and 5 source-bound adversarial groups
+        run: python tests/semantic_contracts_3152.py
+      - name: Verify threat-model lesson N01.02 does not frame attacks as recommended techniques
+        run: python -m unittest discover -s tests -p 'security_pedagogy_lint_3152.py' -v
+      - name: Verify issue9 security B solution edge cases N02 and F04
+        run: python -m unittest discover -s tests -p 'test_issue9_security_contracts.py' -v
+      - name: Verify D06.03 runtime fixture, not type checker parity
+        run: python -m unittest discover -s tests -p 'test_issue9_typeform_runtime.py' -v
+      - name: Verify J07.01 new 3.15 language features
+        run: python -m unittest discover -s tests -p 'test_issue9_python315_features.py' -v
+      - name: Verify SQLAlchemy ORM and SQLite FK schema migration B requirements
+        run: python -m unittest discover -s tests -p 'test_issue9_orm_contracts.py' -v
+      - name: Verify N03.01 outage decision table against independent functional tests
+        run: python tests/fault_policy_n0301_3152.py
+      - name: Verify corrected N01.01 exercise against adversarial cases
+        run: python tests/highrisk_contracts_3152.py
+      - name: Validate 7 corrected application answers against independent functional oracles
+        run: python tests/application_contracts_batch_3152.py
+      - name: Verify five corrected B answers using independent source-bound oracles
+        run: python tests/application_contracts_batch2_3152.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpython-3152-semantic-contracts
+          path: |
+            evidence/semantic_contracts_3152.json
+            evidence/highrisk_application_contracts.json
+            evidence/fault_policy_n0301_3152.json
+            evidence/application_contracts_batch_3152.json
+            evidence/application_contracts_batch2_3152.json
+          if-no-files-found: warn
