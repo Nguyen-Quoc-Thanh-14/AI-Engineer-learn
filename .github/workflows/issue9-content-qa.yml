@@ -15,6 +15,8 @@ on:
       - 'tests/test_issue9_d0601_pep695.py'
       - 'tests/test_issue9_f0203_pyproject.py'
       - 'tests/test_issue9_pd0503_parquet_roundtrip.py'
+      - 'tests/test_issue9_pd0501_copy_on_write.py'
+      - 'tests/test_issue9_h0501_static_lint.py'
       - 'tests/issue9_d0602_overload_checker.py'
       - 'tests/issue9_flag_decisions.py'
       - 'tests/issue9_candidate_context.py'
@@ -38,7 +40,9 @@ jobs:
       - name: Install ORM dependency for the 2 actual ORM/migration exercises
         run: python -m pip install 'sqlalchemy>=2.0,<3'
       - name: Install supported Hypothesis and PyArrow to verify runnable B design exercises
-        run: python -m pip install 'hypothesis>=6,<7' 'pyarrow==26.0.0'
+        run: python -m pip install 'hypothesis>=6,<7' 'pyarrow==26.0.0' 'pandas==3.1.0'
+      - name: Verify PD05.01 pandas 3.x Copy-on-Write behavior
+        run: python -m unittest discover -s tests -p 'test_issue9_pd0501_copy_on_write.py' -v
       - name: Verify H06 shrinking, PE02 Parquet schema and PS02 sensor timezone/units
         run: python -m unittest discover -s tests -p 'test_issue9_design_practicals.py' -v
       - name: Independently verify N02/F04 exercise B semantics
@@ -56,7 +60,9 @@ jobs:
       - name: Verify PD05.03 actual Parquet nullable/timestamp roundtrip
         run: python -m unittest discover -s tests -p 'test_issue9_pd0503_parquet_roundtrip.py' -v
       - name: Install type checkers for D06.02/D06.03 compatibility classification
-        run: python -m pip install 'mypy>=2.4,<3' pyright
+        run: python -m pip install 'mypy>=2.4,<3' pyright ruff
+      - name: Verify H05.01 real Ruff/Pyright positive and negative source cases
+        run: python -m unittest discover -s tests -p 'test_issue9_h0501_static_lint.py' -v
       - name: Verify D06.02 overloads with mypy and pyright positive/negative cases
         run: python tests/issue9_d0602_overload_checker.py
       - name: Verify D06.03 runtime TypedDict extra_items and TypeForm
