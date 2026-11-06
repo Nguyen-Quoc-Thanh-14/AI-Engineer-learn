@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Read-only, source-bound Issue 9 triage context. NOT a semantic review."""
-import hashlib
 import json
 import re
 from pathlib import Path
@@ -8,8 +7,8 @@ import issue9_content_inventory as inventory
 
 ROOT = inventory.ROOT
 DEST = inventory.OUT / "candidate_context_3152.jsonl"
-TITLE = re.compile(r"(?m)^#{1,4}\\s+(.+)$")
-FENCE = re.compile(r"(?m)^\x60\x60\x60(?:python|bash|sh|toml|json)?\\s*$")
+TITLE = re.compile(r"(?m)^#{1,4}\s+(.+)$")
+FENCE = re.compile(r"(?m)^\x60\x60\x60(?:python|bash|sh|toml|json)?\s*$")
 
 def main():
     rows, errors = inventory.audit()
@@ -43,7 +42,7 @@ def main():
     DEST.parent.mkdir(parents=True, exist_ok=True)
     with DEST.open("w", encoding="utf-8") as fp:
         for rec in records:
-            fp.write(json.dumps(rec, ensure_ascii=False, separators=(",", ":")) + "\\n")
+            fp.write(json.dumps(rec, ensure_ascii=False, separators=(",", ":")) + chr(10))
     print("ISSUE9_CONTEXT_TOTAL", len(records), flush=True)
     for rec in records:
         # CI log gives an inspection queue, preserving source hash and wording.
