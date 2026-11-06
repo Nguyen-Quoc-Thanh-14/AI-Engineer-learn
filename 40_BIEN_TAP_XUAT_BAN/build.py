@@ -34,6 +34,7 @@ EXPECTED_PARTS = {
 CODE_FENCE = re.compile(r"^\s{0,3}(" + chr(96) + r"{3,}|~{3,})")
 HEADING = re.compile(r"^(#{1,6})\s+(.+)$")
 LINK = re.compile(r"(?<!!)\[([^\]\n]+)\]\(([^)\n]+)\)")
+INLINE_CODE = re.compile(r"(\x60+)(.*?)\1")
 TITLE = re.compile(r"^#\s+(.+)$", re.MULTILINE)
 CHAPTER_META = re.compile(r"\*\*Chương:\*\*\s*([^·\n]+)")
 
@@ -96,7 +97,11 @@ def lesson_title(source: str, ident: str) -> str:
     return m.group(1)
 
 def rewrite_links(line: str, origin: Path, sha: str, warnings: list):
+    # Source code signatures in inline code are not Markdown hyperlinks.
+    protected = [(m.start(),m.end()) for m in INLINE_CODE.finditer(line)]
     def link(match):
+        if any(start <= match.start() < end for start,end in protected):
+            return match.group(0)
         label, raw = match.group(1), match.group(2)
         value = raw.strip()
         if value.startswith(("#","https://","http://","mailto:","data:","/")):

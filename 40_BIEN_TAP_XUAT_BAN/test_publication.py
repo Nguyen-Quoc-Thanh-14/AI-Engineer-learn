@@ -34,6 +34,19 @@ class PublicationTests(unittest.TestCase):
         self.assertIn("https://github.com/Nguyen-Quoc-Thanh-14/AI-Engineer-learn/blob/"+"a"*40,clean)
         self.assertEqual(original,origin.read_text(encoding="utf8"))
 
+    def test_inline_code_is_not_a_fake_markdown_link(self):
+        origin=ROOT/"03_HOC_PHAN/D/D06/BAI_HOC/D06.01.md"
+        tick=chr(96)
+        warnings=[]
+        src="Dùng "+tick+"def first[T](...)"+tick+" và [mã mẫu](../MA_MAU/D06.01_demo.py)"
+        out=builder.rewrite_links(src,origin,"a"*40,warnings)
+        self.assertIn(tick+"def first[T](...)"+tick,out)
+        self.assertIn("/blob/"+"a"*40+"/03_HOC_PHAN/D/D06/MA_MAU/D06.01_demo.py",out)
+        self.assertEqual(warnings,[])
+        src2="Dùng "+tick+"def f[T](type_expr: TypeForm[T], value: T) -> T"+tick+"."
+        self.assertEqual(builder.rewrite_links(src2,origin,"a"*40,warnings),src2)
+        self.assertEqual(warnings,[])
+
     def test_produced_5_plus_5_manuscripts_and_sha_map(self):
         with tempfile.TemporaryDirectory(prefix="book_test_") as directory:
             destination=Path(directory)/"build"
