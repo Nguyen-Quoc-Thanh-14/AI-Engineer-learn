@@ -56,3 +56,10 @@ Chương trình `tests/issue9_content_inventory.py` đọc toàn bộ nguồn b�
 - **Sửa:** thêm `M05.03_bai_B_orm_query_budget.py` dùng SQLAlchemy/SQLite in-memory, 100 users/200 orders; `selectinload` <=2 SELECT, lazy 101 SELECT; counter tách setup/teardown; thêm `tests/test_issue9_m0503_query_budget.py` với 5 ca độc lập, invalid inputs và counter cleanup.
 - **Đối chứng cục bộ:** 5/5 unittest PASS trên Python container (không phải CPython 3.15.2). Kết quả CPython 3.15.2 phải xem từ workflow Issue #9 đúng SHA.
 - **Giới hạn:** counter này chỉ đo SELECT SQLAlchemy trong fixture; không tuyên bố mọi DB đều đạt 2 queries hay đã có review độc lập. Issue #9 còn OPEN.
+
+## Đối chứng F05.02 và hàng đợi 193 cảnh báo (06/11/2026)
+
+- Trước sửa: 193 mã bài có cờ; gồm 92 lời giải thiết kế, 97 câu lịch sử phiên bản, 2 snippet khác mã B, 2 đoạn Markdown trỏ sang B script. Đây là **193 tín hiệu**, không phải 193 lỗi được xác nhận; không có trùng cờ trong snapshot trước sửa.
+- **F05.02: confirmed missing runnable B demonstration.** Trước đây đáp án mô tả thử eager/lazy nhưng báo “runtime 3.15 absent”; bài tập yêu cầu module log khi import. Đã thêm mã thực thi subprocess để kiểm thứ tự INIT/MAIN và lỗi trì hoãn, 6 kiểm thử nguồn-bound trên CPython 3.15.2. **Chưa ghi PASS cho 6 test mới cho tới khi CI đúng SHA kết thúc.**
+- `tests/issue9_flag_decisions.py` xuất `flagged_lesson_worklist.csv` và `flag_review_summary.json` có SHA nguồn, nhãn việc cần xác minh và giới hạn chứng cứ. Mỗi dòng vẫn `UNVERIFIED_CANDIDATE`, không coi quét tự động là phản biện chuyên môn. Vì F05.02 đổi từ lời giải thiết kế thuần sang demo thực thi, tổng cảnh báo kỳ vọng giảm từ 193 xuống 192; phải xác nhận từ workflow.
+- Nhánh TensorFlow được phép **probe riêng** bằng `.github/workflows/optional-tensorflow-3152.yml`. Nếu chỉ kiểm wheel, không gọi là TensorFlow runtime PASS. Không sửa `release_readiness_3152.py` và không thêm TensorFlow vào điều kiện bắt buộc.
