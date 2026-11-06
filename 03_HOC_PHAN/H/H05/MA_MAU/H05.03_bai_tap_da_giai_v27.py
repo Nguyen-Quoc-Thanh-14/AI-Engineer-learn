@@ -1,5 +1,5 @@
 # coding: utf-8
-# Lời giải vận dụng riêng, Python 3.13.5; 3.15.2 chưa thực thi
+# Lời giải vận dụng riêng; CPython 3.13.5 (lịch sử), 3.15.2 (Actions #42232418794) PASS; chưa phản biện độc lập
 def normalize(text): return ' '.join(text.split())
 def count_words(text): return len(normalize(text).split())
 def count_words_original(text): return len(text.split())

@@ -1,5 +1,5 @@
 # coding: utf-8
-# Lời giải vận dụng riêng, Python 3.13.5; 3.15.2 chưa thực thi
+# Lời giải vận dụng riêng; CPython 3.13.5 (lịch sử), 3.15.2 (Actions #42232418794) PASS; chưa phản biện độc lập
 import sqlite3
 c=sqlite3.connect(':memory:');c.execute('CREATE TABLE acc(id INT PRIMARY KEY, balance INT CHECK(balance>=0))')
 c.executemany('INSERT INTO acc VALUES(?,?)',[(1,100),(2,50)])

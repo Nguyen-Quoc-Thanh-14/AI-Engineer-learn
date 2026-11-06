@@ -1,5 +1,5 @@
 # coding: utf-8
-# Lời giải vận dụng riêng, Python 3.13.5; 3.15.2 chưa thực thi
+# Lời giải vận dụng riêng; CPython 3.13.5 (lịch sử), 3.15.2 (Actions #42232418794) PASS; chưa phản biện độc lập
 def iou(a,b):
     ax1,ay1,ax2,ay2=a;bx1,by1,bx2,by2=b
     if ax2<ax1 or ay2<ay1 or bx2<bx1 or by2<by1:raise ValueError

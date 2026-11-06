@@ -1,5 +1,5 @@
 # coding: utf-8
-# Lời giải vận dụng riêng, Python 3.13.5; 3.15.2 chưa thực thi
+# Lời giải vận dụng riêng; CPython 3.13.5 (lịch sử), 3.15.2 (Actions #42232418794) PASS; chưa phản biện độc lập
 import numpy as np,cv2
 image=np.zeros((5,5),dtype=np.uint8);image[2,2]=255
 _,binary=cv2.threshold(image,127,255,cv2.THRESH_BINARY)

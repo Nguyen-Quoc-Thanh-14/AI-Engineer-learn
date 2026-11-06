@@ -26,8 +26,11 @@ def inspect():
     lesson_rows, structural_errors = inv.audit()
     if structural_errors:
         raise RuntimeError("Invalid source inventory: " + str(structural_errors[:5]))
-    suspects = [r for r in lesson_rows if
-                "POSSIBLE_STALE_VERSION_CLAIM" in r["candidate_flags"].split(";")]
+    suspects = [r for r in lesson_rows if (
+        (ROOT / r["lesson_path"]).parent.parent.joinpath(
+            "MA_MAU", r["lesson_id"] + "_bai_tap_da_giai_v27.py").is_file()
+        or "POSSIBLE_STALE_VERSION_CLAIM" in r["candidate_flags"].split(";")
+    )]
     outputs = []
     for row in suspects:
         identifier = row["lesson_id"]

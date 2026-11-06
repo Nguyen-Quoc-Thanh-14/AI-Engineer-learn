@@ -1,5 +1,5 @@
 # coding: utf-8
-# Lời giải vận dụng riêng, Python 3.13.5; 3.15.2 chưa thực thi
+# Lời giải vận dụng riêng; CPython 3.13.5 (lịch sử), 3.15.2 (Actions #42232418794) PASS; chưa phản biện độc lập
 import struct
 HEADER=struct.Struct('!HI')  # phiên bản 2 bytes, độ dài 4 bytes; big endian
 def encode(payload: bytes, version=1) -> bytes:

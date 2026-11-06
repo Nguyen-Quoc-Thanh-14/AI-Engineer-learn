@@ -1,5 +1,5 @@
 # coding: utf-8
-# Lời giải vận dụng riêng, Python 3.13.5; 3.15.2 chưa thực thi
+# Lời giải vận dụng riêng; CPython 3.13.5 (lịch sử), 3.15.2 (Actions #42232418794) PASS; chưa phản biện độc lập
 from itertools import islice
 # Không tạo danh sách trung gian: generator lọc số chia hết cho 3.
 def stream_total(n):return sum(x for x in range(n) if x%3==0)

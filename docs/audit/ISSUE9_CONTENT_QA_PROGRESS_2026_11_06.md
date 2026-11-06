@@ -63,3 +63,9 @@ Chương trình `tests/issue9_content_inventory.py` đọc toàn bộ nguồn b�
 - **F05.02: confirmed missing runnable B demonstration.** Trước đây đáp án mô tả thử eager/lazy nhưng báo “runtime 3.15 absent”; bài tập yêu cầu module log khi import. Đã thêm mã thực thi subprocess để kiểm thứ tự INIT/MAIN và lỗi trì hoãn, 6 kiểm thử nguồn-bound trên CPython 3.15.2. **Chưa ghi PASS cho 6 test mới cho tới khi CI đúng SHA kết thúc.**
 - `tests/issue9_flag_decisions.py` xuất `flagged_lesson_worklist.csv` và `flag_review_summary.json` có SHA nguồn, nhãn việc cần xác minh và giới hạn chứng cứ. Mỗi dòng vẫn `UNVERIFIED_CANDIDATE`, không coi quét tự động là phản biện chuyên môn. Vì F05.02 đổi từ lời giải thiết kế thuần sang demo thực thi, tổng cảnh báo kỳ vọng giảm từ 193 xuống 192; phải xác nhận từ workflow.
 - Nhánh TensorFlow được phép **probe riêng** bằng `.github/workflows/optional-tensorflow-3152.yml`. Nếu chỉ kiểm wheel, không gọi là TensorFlow runtime PASS. Không sửa `release_readiness_3152.py` và không thêm TensorFlow vào điều kiện bắt buộc.
+
+## Bằng chứng kiểm tra B v27 và hiệu đính 85 tuyên bố phiên bản (06/11/2026)
+
+- [Workflow #42232418794](https://github.com/Nguyen-Quoc-Thanh-14/AI-Engineer-learn/actions/runs/42232418794): CPython **3.15.2**, **85** B scripts v27 chạy với exit 0 + marker PASS, **12** bài khác không có mã B lịch sử. Artifact `issue9-historical-B-3152-not-expert-review` digest `sha256:b98a78f06551d15cbad91333f509c09751c73cf552543931793c9d89db385458`.
+- Đã hiệu đính ghi chú 85 bài có bằng chứng chạy (83 bài trong commit này và 2 bài D06.01/F02.03 đã được sửa độc lập ở commit khác cùng nhánh). Nội dung 12 bài không có B v27 không bị tự gán PASS. Phản biện độc lập vẫn chưa có.
+- Runner được điều chỉnh chạy mọi B v27 còn trong repository sau khi cảnh báo lịch sử được cập nhật, không mất diện kiểm chứng; bổ sung 3 B scripts L03 trước đây không nằm trong 97 cảnh báo. Kết quả cuối phải được đối chiếu trên đúng SHA.
