@@ -1,0 +1,66 @@
+{
+  "title": "Giáo trình Python: từ nền tảng đến chuyên sâu",
+  "edition": "Bản xem trước biên tập 0.9 — 06/11/2026",
+  "language": "vi",
+  "audience": "Người bắt đầu học Python, kỹ sư phần mềm và AI",
+  "publisher_status": "Tự xuất bản — đang chuẩn bị",
+  "author_display": "Tên tác giả/ban biên soạn: chủ sở hữu xác nhận trước khi phát hành",
+  "volumes": [
+    {
+      "id": "TAP_01",
+      "title": "Nền tảng Python và lập trình có cấu trúc",
+      "parts": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ]
+    },
+    {
+      "id": "TAP_02",
+      "title": "Công cụ phát triển, kiểm thử và tư duy lập trình",
+      "parts": [
+        "F",
+        "G",
+        "H",
+        "I",
+        "J"
+      ]
+    },
+    {
+      "id": "TAP_03",
+      "title": "Hiệu năng, đồng thời, hệ thống và bảo mật",
+      "parts": [
+        "K",
+        "L",
+        "M",
+        "N",
+        "O"
+      ]
+    },
+    {
+      "id": "TAP_04",
+      "title": "Ứng dụng, dữ liệu, kỹ thuật dữ liệu và học máy",
+      "parts": [
+        "PA",
+        "PD",
+        "PE",
+        "PL",
+        "PM"
+      ]
+    },
+    {
+      "id": "TAP_05",
+      "title": "AI ứng dụng, tính toán native, khoa học và thị giác máy tính",
+      "parts": [
+        "PN",
+        "PR",
+        "PS",
+        "PT",
+        "PV",
+        "PW"
+      ]
+    }
+  ]
+}
