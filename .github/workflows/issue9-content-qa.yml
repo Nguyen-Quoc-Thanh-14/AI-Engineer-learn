@@ -1,0 +1,38 @@
+name: Issue 9 — 441 lesson / 95 B script triage (not expert review)
+on:
+  push:
+    branches:
+      - audit/issue9-content-qa
+    paths:
+      - '03_HOC_PHAN/**'
+      - '31_HOAN_THIEN_LOI_GIAI_V28/**'
+      - 'tests/issue9_content_inventory.py'
+      - 'tests/test_issue9_security_contracts.py'
+      - 'tests/test_issue9_content_inventory.py'
+      - '.github/workflows/issue9-content-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect-441-and-95:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Independently verify N02/F04 exercise B semantics
+        run: python -m unittest discover -s tests -p 'test_issue9_security_contracts.py' -v
+      - name: Verify triage detects real source-integrity failures
+        run: python -m unittest discover -s tests -p 'test_issue9_content_inventory.py' -v
+      - name: Scan all 441 lessons and all 95 standalone B programs
+        run: python tests/issue9_content_inventory.py
+      - name: Verify report JSON
+        run: python -m json.tool evidence/issue9_content_qa/summary.json > /dev/null
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue9-441-lessons-95-B-TRIAGE-not-certification
+          path: evidence/issue9_content_qa/
+          if-no-files-found: warn
