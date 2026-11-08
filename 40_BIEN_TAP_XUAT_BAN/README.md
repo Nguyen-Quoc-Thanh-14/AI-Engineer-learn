@@ -4,6 +4,12 @@
 
 Thư mục này tách biệt với 441 bài học ở 03_HOC_PHAN và mã nguồn kiểm toán. Mục tiêu là chỉnh thể cách đọc, mục lục, thứ tự chương, liên kết và trình bày mà KHÔNG thay đổi hợp đồng bài tập, kết quả kiểm thử lịch sử hay mã gốc.
 
+## Tập 00 — Nền tảng toán học (học trước Tập 01)
+
+[TẬP 00 — NỀN TẢNG TOÁN HỌC CHO PYTHON VÀ AI](TAP_00_TOAN_HOC/TAP_00_NEN_TANG_TOAN_HOC.md) là **tài liệu bổ trợ thuần lý thuyết** gồm 15 chương: logic, đại số, hàm số, giải tích, đại số tuyến tính, tối ưu, xác suất, thống kê, lý thuyết thông tin, số học máy tính, Machine Learning, Deep Learning và Computer Vision. Các chứng minh có giả thiết; kết quả nâng cao có thể chỉ được phác thảo.
+
+**Thứ tự học đề xuất:** Tập 00 → Tập 01 → Tập 02 → Tập 03 → Tập 04 → Tập 05. Tập 00 **không nằm trong** bộ 441 bài và không thay đổi các chỉ tiêu 5 tập/10 ấn bản của pipeline xuất bản hiện có. Word/PDF của Tập 00 được dựng riêng; tệp Markdown là bản đọc/biên tập trên GitHub.
+
 ## Cấu trúc thành phẩm
 
 | Tập | Học phần | Bài học | Nội dung |
