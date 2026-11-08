@@ -21,6 +21,24 @@ toc-title: "MỤC LỤC"
 - **Ví dụ tính tay:** tự tính một trường hợp nhỏ trước khi nghĩ đến viết mã.
 - **Liên hệ AI và giới hạn:** hiểu kiến thức dùng ở đâu, cũng như điều kiện khiến công thức không áp dụng.
 
+## Nội dung 15 chương
+
+1. Ngôn ngữ toán học và cách chứng minh.
+2. Số, đại số, lũy thừa và tổng.
+3. Hàm số, đồ thị và mô hình hóa.
+4. Giải tích một biến: biến thiên liên tục.
+5. Đại số tuyến tính và biểu diễn dữ liệu.
+6. Giải tích nhiều biến và tối ưu hóa.
+7. Xác suất: mô tả bất định.
+8. Thống kê, lấy mẫu và đánh giá bằng chứng.
+9. Lý thuyết thông tin và hàm mất mát.
+10. Toán số trên máy tính.
+11. Từ toán đến Machine Learning.
+12. Deep Learning: đạo hàm qua mạng nhiều lớp.
+13. Toán học cho Computer Vision.
+14. Phép đo chất lượng và khả năng khái quát hóa.
+15. Bản đồ tổng hợp: học toán để đọc AI.
+
 ## Lộ trình theo mức độ
 
 - **Chặng 1 — Nền móng (Chương 1–3):** ký hiệu, logic, phép biến đổi, hàm số.
